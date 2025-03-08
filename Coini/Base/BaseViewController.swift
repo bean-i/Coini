@@ -28,7 +28,6 @@ class BaseViewController<T: UIView>: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        view.backgroundColor = .white
         navigationController?.navigationBar.topItem?.backButtonTitle = ""
     }
     
