@@ -33,6 +33,12 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
             }
             .disposed(by: disposeBag)
         
+        output.NFTItems
+            .bind(to: mainView.nftCollectionView.rx.items(cellIdentifier: NFTCollectionViewCell.identifier, cellType: NFTCollectionViewCell.self)) { (row, element, cell) in
+                cell.configureData(data: element)
+            }
+            .disposed(by: disposeBag)
+        
         output.networkTime
             .map { DateFormatter.networkTime($0) }
             .bind(to: mainView.keywordDateLabel.rx.text)
