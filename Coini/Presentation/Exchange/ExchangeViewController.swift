@@ -27,6 +27,8 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
     }
     
     override func bind() {
+        let restartButton = PublishRelay<Int>()
+        
         let input = ExchangeViewModel.Input(
             viewDidLoadTrigger: Observable.just(0),
             sortButtonTappedValue: Observable.of(
@@ -66,10 +68,37 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
                         return Observable.just((SortStandard.trading, status))
                     }
                 }
-            }
+            },
+            restartNetwork: restartButton
         )
         
         let output = viewModel.transform(input: input)
+
+        restartButton.subscribe(with: self) { owner, _ in
+            print("재시작 버튼 탭")
+        }
+        .disposed(by: disposeBag)
+        
+        output.networkDisconnected
+            .subscribe(with: self) { owner, _ in
+                print("💕💕💕💕💕💕")
+                let vc = NetworkPopViewController()
+                
+                vc.mainView.retryButton.rx.tap
+                    .map { 0 }
+                    .bind(to: restartButton)
+                    .disposed(by: owner.disposeBag)
+                
+                vc.mainView.configureMessage(
+                    title: "안내",
+                    message: "네트워크 연결이 일시적으로 원활하지 않습니다. 데이터 또는 Wi-Fi 연결 상태를 확인해주세요."
+                )
+                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalTransitionStyle = .crossDissolve
+                owner.present(vc, animated: false)
+            }
+            .disposed(by: disposeBag)
+        
         
         // coin 테이블뷰
         output.coinItems
