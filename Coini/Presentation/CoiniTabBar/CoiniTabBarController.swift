@@ -21,7 +21,12 @@ final class CoiniTabBarController: UITabBarController {
         firstVC.tabBarItem.image = UIImage(systemName: "chart.line.uptrend.xyaxis")
         let firstNav = UINavigationController(rootViewController: firstVC)
         
-        setViewControllers([firstNav], animated: true)
+        let secondVC = CoinInfoViewController()
+        secondVC.tabBarItem.title = "코인정보"
+        secondVC.tabBarItem.image = UIImage(systemName: "chart.bar.fill")
+        let secondNav = UINavigationController(rootViewController: secondVC)
+        
+        setViewControllers([firstNav, secondNav], animated: true)
     }
     
     private func configureTabBarAppearance() {
