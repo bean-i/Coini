@@ -26,7 +26,12 @@ final class CoiniTabBarController: UITabBarController {
         secondVC.tabBarItem.image = UIImage(systemName: "chart.bar.fill")
         let secondNav = UINavigationController(rootViewController: secondVC)
         
-        setViewControllers([firstNav, secondNav], animated: true)
+        let thirdVC = PortfolioViewController()
+        thirdVC.tabBarItem.title = "포트폴리오"
+        thirdVC.tabBarItem.image = UIImage(systemName: "star")
+        let thirdNav = UINavigationController(rootViewController: thirdVC)
+        
+        setViewControllers([firstNav, secondNav, thirdNav], animated: true)
     }
     
     private func configureTabBarAppearance() {
