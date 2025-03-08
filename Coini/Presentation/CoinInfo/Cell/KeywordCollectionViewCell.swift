@@ -47,14 +47,14 @@ final class KeywordCollectionViewCell: BaseCollectionViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(2)
+            make.top.equalToSuperview()
             make.leading.equalTo(imageView.snp.trailing).offset(5)
             make.trailing.lessThanOrEqualTo(statusImageView.snp.leading).inset(-2)
         }
         
         subTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
             make.leading.equalTo(imageView.snp.trailing).offset(5)
+            make.bottom.equalToSuperview()
             make.trailing.lessThanOrEqualTo(statusImageView.snp.leading).inset(-2)
         }
         
@@ -110,14 +110,14 @@ final class KeywordCollectionViewCell: BaseCollectionViewCell {
         if data.item.data.changePercentage.krw >= 0 {
             statusImageView.image = UIImage(systemName: "arrowtriangle.up.fill")
             statusImageView.tintColor = .customRed
+            statusPercentLabel.text = "\(data.item.data.changePercentage.krw.commonRound())%"
             statusPercentLabel.textColor = .customRed
         } else {
             statusImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
             statusImageView.tintColor = .customBlue
+            statusPercentLabel.text = "\((-data.item.data.changePercentage.krw).commonRound())%"
             statusPercentLabel.textColor = .customBlue
         }
-        
-        statusPercentLabel.text = "\(data.item.data.changePercentage.krw.commonRound())%"
     }
     
 }
