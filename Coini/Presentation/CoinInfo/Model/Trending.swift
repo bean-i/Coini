@@ -7,10 +7,30 @@
 
 import Foundation
 
+// MARK: - Trending API Model
 struct Trending: Decodable {
     let coins: [SearchCoin]
+    let nfts: [SearchNFT]
 }
 
+// MARK: - NFT
+struct SearchNFT: Decodable {
+    let name: String
+    let thumb: String
+    let data: NFTData
+}
+
+struct NFTData: Decodable {
+    let floorPrice: String
+    let floorPercentage: String
+    
+    enum CodingKeys: String, CodingKey {
+        case floorPrice = "floor_price"
+        case floorPercentage = "floor_price_in_usd_24h_percentage_change"
+    }
+}
+
+// MARK: - Coin
 struct SearchCoin: Decodable {
     let item: Item
 }
@@ -36,7 +56,10 @@ struct CoinPercentage: Decodable {
     let krw: Double
 }
 
-
+// MARK: - Dummy
 extension Trending {
-    static let empty = Trending(coins: [])
+    static let empty = Trending(
+        coins: [],
+        nfts: []
+    )
 }
