@@ -10,26 +10,33 @@ import Alamofire
 
 enum Router {
     
-    case UpbitTickers
+    case upbitTickers
+    case geckoTrending
     
     var endpoint: URL? {
         switch self {
-        case .UpbitTickers:
+        case .upbitTickers:
             return URL(string: UpbitAPI.url + "/v1/ticker/all")
+        case .geckoTrending:
+            return URL(string: GechoAPI.url + "/api/v3/search/trending")
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .UpbitTickers:
+        case .upbitTickers:
+            return .get
+        case .geckoTrending:
             return .get
         }
     }
     
     var parameters: Parameters {
         switch self {
-        case .UpbitTickers:
+        case .upbitTickers:
             return ["quote_currencies": "KRW"]
+        case .geckoTrending:
+            return [:]
         }
     }
     
