@@ -21,7 +21,7 @@ final class KeywordCollectionViewCell: BaseCollectionViewCell {
     let titleLabel = UILabel()
     let subTitleLabel = UILabel()
     
-    let statusimageView = UIImageView()
+    let statusImageView = UIImageView()
     let statusPercentLabel = UILabel()
     
     override func configureHierarchy() {
@@ -30,7 +30,7 @@ final class KeywordCollectionViewCell: BaseCollectionViewCell {
             imageView,
             titleLabel,
             subTitleLabel,
-            statusimageView,
+            statusImageView,
             statusPercentLabel
         )
     }
@@ -49,16 +49,16 @@ final class KeywordCollectionViewCell: BaseCollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(2)
             make.leading.equalTo(imageView.snp.trailing).offset(5)
-            make.trailing.lessThanOrEqualTo(statusimageView.snp.leading).inset(-2)
+            make.trailing.lessThanOrEqualTo(statusImageView.snp.leading).inset(-2)
         }
         
         subTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.equalTo(imageView.snp.trailing).offset(5)
-            make.trailing.lessThanOrEqualTo(statusimageView.snp.leading).inset(-2)
+            make.trailing.lessThanOrEqualTo(statusImageView.snp.leading).inset(-2)
         }
         
-        statusimageView.snp.makeConstraints { make in
+        statusImageView.snp.makeConstraints { make in
             make.trailing.equalTo(statusPercentLabel.snp.leading).inset(-3)
             make.centerY.equalToSuperview()
             make.width.equalTo(8)
@@ -108,12 +108,12 @@ final class KeywordCollectionViewCell: BaseCollectionViewCell {
         subTitleLabel.text = data.item.name
 
         if data.item.data.changePercentage.krw >= 0 {
-            statusimageView.image = UIImage(systemName: "arrowtriangle.up.fill")
-            statusimageView.tintColor = .customRed
+            statusImageView.image = UIImage(systemName: "arrowtriangle.up.fill")
+            statusImageView.tintColor = .customRed
             statusPercentLabel.textColor = .customRed
         } else {
-            statusimageView.image = UIImage(systemName: "arrowtriangle.down.fill")
-            statusimageView.tintColor = .customBlue
+            statusImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+            statusImageView.tintColor = .customBlue
             statusPercentLabel.textColor = .customBlue
         }
         
