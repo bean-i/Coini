@@ -59,7 +59,7 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
                 if !value.trimmingCharacters(in: .whitespaces).isEmpty {
                     // 화면 전환
                     let vc = SearchViewController()
-                    vc.viewModel.searchKeyword = value
+                    vc.viewModel.searchKeyword.accept(value)
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }

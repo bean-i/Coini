@@ -13,14 +13,16 @@ final class SearchViewModel: BaseViewModel {
     
     struct Input {
         let bacButtonTapped: ControlEvent<Void>
+        let searchButtonTapped: Observable<String>
         let tabSelected: ControlEvent<IndexPath>
         let swipe: Observable<CGFloat>
     }
     
     struct Output {
+        let searchKeyword: BehaviorRelay<String>
         let bacButtonTapped: ControlEvent<Void>
         let headerItems: BehaviorRelay<[HeaderItem]>
-        let currentIndex: BehaviorRelay<Int>
+        let scrollToIndex: BehaviorRelay<Int>
         let detailViews: BehaviorRelay<[UIViewController]>
     }
     
@@ -30,7 +32,8 @@ final class SearchViewModel: BaseViewModel {
         HeaderItem(isSelected: false, title: "거래소")
     ]
     
-    var searchKeyword = "empty"
+//    var searchKeyword = "empty"
+    let searchKeyword = BehaviorRelay(value: "empty")
     var deviceWidth: CGFloat = 0
     let disposeBag = DisposeBag()
     
@@ -39,13 +42,22 @@ final class SearchViewModel: BaseViewModel {
         var updatedItems = headerItems.value
         
         let coinVC = CoinSearchViewController()
-        coinVC.viewModel.searchKeyword.accept(searchKeyword)
         let detailViews = [coinVC, NFTSearchViewController(), ExchangeSearchViewController()]
         
         // 자동 스크롤
-        let currentIndex = BehaviorRelay(value: 0)
+        let scrollToIndex = BehaviorRelay(value: 0)
         
         let changedIndex = BehaviorRelay(value: IndexPath(row: 0, section: 0))
+        
+        // searchKeyword -> 코인뷰모델에 전달 (-> 통신)
+        searchKeyword
+            .bind(to: coinVC.viewModel.searchKeyword)
+            .disposed(by: disposeBag)
+        
+        // 텍스트필드 서치탭 -> searchKeyword에 전달
+        input.searchButtonTapped
+            .bind(to: searchKeyword)
+            .disposed(by: disposeBag)
         
         // 헤더탭 선택 -> changedIndex에 전달
         input.tabSelected
@@ -76,7 +88,7 @@ final class SearchViewModel: BaseViewModel {
                 for index in 0..<updatedItems.count {
                     if index == item.item {
                         updatedItems[index].isSelected = true
-                        currentIndex.accept(index)
+                        scrollToIndex.accept(index)
                     } else {
                         updatedItems[index].isSelected = false
                     }
@@ -89,9 +101,9 @@ final class SearchViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         return Output(
-            bacButtonTapped: input.bacButtonTapped,
+            searchKeyword: searchKeyword, bacButtonTapped: input.bacButtonTapped,
             headerItems: headerItems,
-            currentIndex: currentIndex,
+            scrollToIndex: scrollToIndex,
             detailViews: BehaviorRelay(value: detailViews)
         )
     }

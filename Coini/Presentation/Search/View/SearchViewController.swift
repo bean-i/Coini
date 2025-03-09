@@ -32,6 +32,8 @@ final class SearchViewController: BaseViewController<SearchView> {
         
         let input = SearchViewModel.Input(
             bacButtonTapped: mainView.backButton.rx.tap,
+            searchButtonTapped: mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+                .withLatestFrom(mainView.searchTextField.rx.text.orEmpty),
             tabSelected: mainView.headerTabCollectionView.rx.itemSelected,
             swipe: mainView.pageCollectionView.rx.didScroll
                 .filter { scrolledByUser }
@@ -46,6 +48,11 @@ final class SearchViewController: BaseViewController<SearchView> {
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
+            .disposed(by: disposeBag)
+        
+        // 검색어
+        output.searchKeyword
+            .bind(to: mainView.searchTextField.rx.text)
             .disposed(by: disposeBag)
         
         // 헤더탭
@@ -67,7 +74,7 @@ final class SearchViewController: BaseViewController<SearchView> {
             .disposed(by: disposeBag)
         
         // 헤더 탭했을 때 자동 scroll 적용
-        output.currentIndex
+        output.scrollToIndex
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, index in
                 let point = CGPoint(x: Int(owner.viewModel.deviceWidth) * index, y: 0)
