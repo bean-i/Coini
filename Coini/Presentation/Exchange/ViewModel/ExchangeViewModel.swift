@@ -52,7 +52,7 @@ final class ExchangeViewModel: BaseViewModel {
             input.viewDidLoadTrigger.asObservable(),
             Observable<Int>.interval(.seconds(5), scheduler: MainScheduler.instance)
         )
-        .debug("네트워크 통신 시도 시작")
+//        .debug("네트워크 통신 시도 시작")
         .withUnretained(self)
         .flatMapLatest { _ in
             print("현재 연결 상태는..:", networkConnected.value)
@@ -60,7 +60,7 @@ final class ExchangeViewModel: BaseViewModel {
                 print("인터넷 연결이 안 돼있는 것 같아요!!")
                 return Single<[Ticker]>.error(URLError(.notConnectedToInternet))
             } else {
-                return UpbitNetworkManager.shared.getTickers(api: .UpbitTickers, type: [Ticker].self)
+                return UpbitNetworkManager.shared.getTickers(api: .upbitTickers, type: [Ticker].self)
                     .catch { error in
                         print("error 방출됨.")
 //                        print(error)
@@ -70,7 +70,7 @@ final class ExchangeViewModel: BaseViewModel {
         }
         .map { self.sortedByStandard(value: $0, standard: sortBy.value.0, by: sortBy.value.1) }
         .subscribe(with: self) { owner, value in
-            print("========통신 완료(성공/실패)========")
+            print("1️⃣1️⃣1️⃣통신 완료(성공/실패)1️⃣1️⃣1️⃣")
             coinItems.accept(value)
         } onError: { owner, error in
             networkDisConnected.accept(())
