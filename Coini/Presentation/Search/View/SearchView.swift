@@ -44,7 +44,9 @@ final class SearchView: BaseView {
         
         pageCollectionView.snp.makeConstraints { make in
             make.top.equalTo(headerTabCollectionView.snp.bottom)
-            make.horizontalEdges.bottom.equalToSuperview()
+//            make.horizontalEdges.bottom.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
     
@@ -83,7 +85,7 @@ final class SearchView: BaseView {
     private func configurePageCollectionViewLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewFlowLayout()
         let itemWidth = frame.width
-        let itemHeight = frame.height
+        let itemHeight = frame.height - 220 // 디바이스 전체 높이에서  - 44 - 네비게이션바 - 탭바
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal

@@ -29,13 +29,19 @@ final class SearchViewModel: BaseViewModel {
         HeaderItem(isSelected: false, title: "NFT"),
         HeaderItem(isSelected: false, title: "거래소")
     ]
-    let detailViews = [aViewController(), bViewController()]
-    var deviceWidth: CGFloat = 1
+    
+    var searchKeyword = "empty"
+    var deviceWidth: CGFloat = 0
     let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
         let headerItems = BehaviorRelay(value: headerItems)
         var updatedItems = headerItems.value
+        
+        let coinVC = CoinSearchViewController()
+        coinVC.viewModel.searchKeyword.accept(searchKeyword)
+        let detailViews = [coinVC, NFTSearchViewController(), ExchangeSearchViewController()]
+        
         // 자동 스크롤
         let currentIndex = BehaviorRelay(value: 0)
         
