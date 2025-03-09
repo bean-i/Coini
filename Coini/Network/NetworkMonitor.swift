@@ -10,6 +10,12 @@ import RxSwift
 import RxCocoa
 import Network
 
+enum NetworkStatusType {
+    case disconnect
+    case connect
+    case unknown
+}
+
 final class NetworkMonitor {
     
     static let shared = NetworkMonitor()
