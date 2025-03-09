@@ -21,11 +21,11 @@ final class SearchView: BaseView {
     
     let headerTabCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     let pageCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
-//    let pageView = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
     
     override func layoutSubviews() {
         super.layoutSubviews()
         headerTabCollectionView.collectionViewLayout = configureHeaderTabCollectionViewLayout()
+        pageCollectionView.collectionViewLayout = configurePageCollectionViewLayout()
     }
     
     override func configureHierarchy() {
@@ -49,6 +49,7 @@ final class SearchView: BaseView {
     }
     
     override func configureView() {
+        backgroundColor = .white
         backButton.tintColor = .customNavy
         
         searchTextField.text = "Bitcoin"
@@ -62,6 +63,10 @@ final class SearchView: BaseView {
         headerTabCollectionView.register(HeaderTabCollectionViewCell.self, forCellWithReuseIdentifier: HeaderTabCollectionViewCell.identifier)
         
         pageCollectionView.backgroundColor = .white
+        pageCollectionView.showsHorizontalScrollIndicator = false
+        pageCollectionView.showsVerticalScrollIndicator = false
+        pageCollectionView.register(PageCollectionViewCell.self, forCellWithReuseIdentifier: PageCollectionViewCell.identifier)
+        pageCollectionView.isPagingEnabled = true
     }
     
     private func configureHeaderTabCollectionViewLayout() -> UICollectionViewLayout {
@@ -72,6 +77,17 @@ final class SearchView: BaseView {
         layout.minimumLineSpacing = 0
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: itemSize, height: 44)
+        return layout
+    }
+    
+    private func configurePageCollectionViewLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewFlowLayout()
+        let itemWidth = frame.width
+        let itemHeight = frame.height
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: itemWidth, height: itemHeight)
         return layout
     }
 }
