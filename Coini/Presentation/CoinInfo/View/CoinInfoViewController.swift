@@ -23,7 +23,13 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
     }
     
     override func bind() {
-        let input = CoinInfoViewModel.Input(viewDidLoadTrigger: Observable.just(0))
+        let input = CoinInfoViewModel.Input(
+            viewDidLoadTrigger: Observable.just(0),
+            searchButtonTapped: mainView.searchBar.rx.searchButtonClicked
+                .withUnretained(self)
+                .map { owner, _ in owner.mainView.searchBar.resignFirstResponder() }
+                .withLatestFrom(mainView.searchBar.rx.text.orEmpty)
+        )
         let output = viewModel.transform(input: input)
 
         // 인기 검색어
@@ -45,23 +51,19 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
             .map { DateFormatter.networkTime($0) }
             .bind(to: mainView.keywordDateLabel.rx.text)
             .disposed(by: disposeBag)
-        
+
         // 검색
-        
-        mainView.searchBar.rx.searchButtonClicked
-            .withUnretained(self)
-            .map { _ in self.mainView.searchBar.resignFirstResponder() }
-            .withLatestFrom(mainView.searchBar.rx.text.orEmpty)
+        output.searchButtonTapped
             .bind(with: self) { owner, value in
                 print(value)
                 if !value.trimmingCharacters(in: .whitespaces).isEmpty {
                     // 화면 전환
                     let vc = SearchViewController()
+                    vc.viewModel.searchKeyword = value
                     owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }
             .disposed(by: disposeBag)
     }
-    
     
 }

@@ -13,12 +13,14 @@ final class CoinInfoViewModel: BaseViewModel {
     
     struct Input {
         let viewDidLoadTrigger: Observable<Int>
+        let searchButtonTapped: Observable<String>
     }
     
     struct Output {
         let coinItems: BehaviorRelay<[SearchCoin]>
         let NFTItems: BehaviorRelay<[SearchNFT]>
         let networkTime: BehaviorRelay<Date>
+        let searchButtonTapped: Observable<String>
     }
     
     let disposeBag = DisposeBag()
@@ -61,7 +63,8 @@ final class CoinInfoViewModel: BaseViewModel {
         return Output(
             coinItems: coinItems,
             NFTItems: NFTItems,
-            networkTime: networkTime
+            networkTime: networkTime,
+            searchButtonTapped: input.searchButtonTapped
         )
     }
     
