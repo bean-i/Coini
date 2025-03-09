@@ -44,7 +44,6 @@ final class SearchView: BaseView {
         
         pageCollectionView.snp.makeConstraints { make in
             make.top.equalTo(headerTabCollectionView.snp.bottom)
-//            make.horizontalEdges.bottom.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(safeAreaLayoutGuide)
         }
@@ -54,9 +53,7 @@ final class SearchView: BaseView {
         backgroundColor = .white
         backButton.tintColor = .customNavy
         
-        searchTextField.text = "Bitcoin"
         searchTextField.borderStyle = .none
-        searchTextField.backgroundColor = .green
         searchTextField.textAlignment = .left
         
         headerTabCollectionView.backgroundColor = .clear
