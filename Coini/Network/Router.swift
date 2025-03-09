@@ -12,6 +12,7 @@ enum Router {
     
     case upbitTickers
     case geckoTrending
+    case geckoSearch(keyword: String)
     
     var endpoint: URL? {
         switch self {
@@ -19,6 +20,8 @@ enum Router {
             return URL(string: UpbitAPI.url + "/v1/ticker/all")
         case .geckoTrending:
             return URL(string: GechoAPI.url + "/api/v3/search/trending")
+        case .geckoSearch:
+            return URL(string: GechoAPI.url + "/api/v3/search")
         }
     }
     
@@ -27,6 +30,8 @@ enum Router {
         case .upbitTickers:
             return .get
         case .geckoTrending:
+            return .get
+        case .geckoSearch:
             return .get
         }
     }
@@ -37,6 +42,8 @@ enum Router {
             return ["quote_currencies": "KRW"]
         case .geckoTrending:
             return [:]
+        case .geckoSearch(let keyword):
+            return ["query": keyword]
         }
     }
     
