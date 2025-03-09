@@ -9,69 +9,85 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-struct HeaderItem {
-    var isSelected: Bool
-    let title: String
-}
-
 final class SearchViewController: BaseViewController<SearchView> {
     
+    let viewModel = SearchViewModel()
     let disposeBag = DisposeBag()
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        viewModel.deviceWidth = view.frame.width
+    }
 
     override func configureNavigation() {
         navigationItem.leftBarButtonItems = [
             mainView.backButton,
             UIBarButtonItem(customView: mainView.searchTextField)
         ]
-        
     }
     
     override func bind() {
         
-        mainView.backButton.rx.tap
+        var scrolledByUser = false
+        
+        let input = SearchViewModel.Input(
+            bacButtonTapped: mainView.backButton.rx.tap,
+            tabSelected: mainView.headerTabCollectionView.rx.itemSelected,
+            swipe: mainView.pageCollectionView.rx.didScroll
+                .filter { scrolledByUser }
+                .withLatestFrom(mainView.pageCollectionView.rx.contentOffset.changed)
+                .map { $0.x }
+                .distinctUntilChanged()
+        )
+        let output = viewModel.transform(input: input)
+        
+        // 뒤로가기 버튼
+        output.bacButtonTapped
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
         
- 
-        let items = [
-            HeaderItem(isSelected: true, title: "코인"),
-            HeaderItem(isSelected: false, title: "NFT"),
-            HeaderItem(isSelected: false, title: "거래소")
-        ]
-        
-        let headerItems = BehaviorRelay(value: items)
-        var updatedItems = headerItems.value
-        
-        headerItems
+        // 헤더탭
+        output.headerItems
+            .observe(on: MainScheduler.instance)
             .bind(to: mainView.headerTabCollectionView.rx.items(cellIdentifier: HeaderTabCollectionViewCell.identifier, cellType: HeaderTabCollectionViewCell.self)) { (row, element, cell) in
                 print("🔥🔥🔥🔥🔥")
                 print(element)
                 cell.configureData(data: element)
             }
             .disposed(by: disposeBag)
-
-        // 셀을 표현할 때, isSelected랑 title을 같이 넘겨줘서 표현하고
-        // isSelected랑 title을 한번에 갖고있는 데이터타입을 만들어서
-        // itemSelected되면 해당 데이터타입을 변경. -> 그럼 자동으로 데이터타입을 구독하고 있기 때문에 컬렉션뷰가 업데이트 되지 않을까?
-        mainView.headerTabCollectionView.rx.itemSelected
-            .map { item in
-                for index in 0..<updatedItems.count {
-                    if index == item.item {
-                        updatedItems[index].isSelected = true
-                    } else {
-                        updatedItems[index].isSelected = false
-                    }
-                }
-                return updatedItems
-            }
-            .bind(with: self) { owner, items in
-                headerItems.accept(items)
+        
+        // 페이지뷰
+        output.detailViews
+            .bind(to: mainView.pageCollectionView.rx.items(cellIdentifier: PageCollectionViewCell.identifier, cellType: PageCollectionViewCell.self)) { (row, element, cell) in
+                print("🔍🔍🔍🔍🔍🔍")
+                cell.configureData(data: element)
             }
             .disposed(by: disposeBag)
         
+        // 헤더 탭했을 때 자동 scroll 적용
+        output.currentIndex
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, index in
+                let point = CGPoint(x: Int(owner.viewModel.deviceWidth) * index, y: 0)
+                owner.mainView.pageCollectionView.setContentOffset(point, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        // 사용자가 스와이프한 경우
+        mainView.pageCollectionView.rx.willBeginDragging
+            .bind(with: self) { owner, _ in
+                scrolledByUser = true
+            }
+            .disposed(by: disposeBag)
+        
+        // 사용자가 스와이프한 경우 + 자동 스크롤일 경우
+        mainView.pageCollectionView.rx.didEndDecelerating
+            .bind(with: self) { owner, _ in
+                scrolledByUser = false
+            }
+            .disposed(by: disposeBag)
     }
-    
     
 }
