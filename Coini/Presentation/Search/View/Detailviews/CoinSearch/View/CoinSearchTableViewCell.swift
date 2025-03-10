@@ -8,10 +8,14 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import RxSwift
+import RxCocoa
 
 final class CoinSearchTableViewCell: BaseTableViewCell {
     
     static let identifier = "CoinSearchTableViewCell"
+    
+    var disposeBag = DisposeBag()
     
     let coinImageView = UIImageView()
     
@@ -26,7 +30,12 @@ final class CoinSearchTableViewCell: BaseTableViewCell {
     
     let subTitleLabel = UILabel()
     
-    let starButton = UIButton()
+    let starButton = StarButton()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     
     override func configureHierarchy() {
         rankStackView.addArrangedSubviews(
@@ -112,12 +121,10 @@ final class CoinSearchTableViewCell: BaseTableViewCell {
         
         rankLabel.font = .boldSystemFont(ofSize: 9)
         rankLabel.textColor = .customDarkGray
-        
-        starButton.tintColor = .customNavy
-        starButton.setImage(UIImage(systemName: "star"), for: .normal)
     }
     
     func configureData(data: DetailCoin) {
+        starButton.id = data.id
         
         // 이미지
         if let url = URL(string: data.thumb) {
