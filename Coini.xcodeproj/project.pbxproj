@@ -184,6 +184,7 @@
 				DEVELOPMENT_TEAM = 5S7XHWYU87;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Coini/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "이빈";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -216,6 +217,7 @@
 				DEVELOPMENT_TEAM = 5S7XHWYU87;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Coini/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "이빈";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
