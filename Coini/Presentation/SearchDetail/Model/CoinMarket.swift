@@ -11,14 +11,14 @@ struct CoinMarket: Decodable {
     let id: String
     let name: String
     let image: String
-    let currentPrice: Int
+    let currentPrice: Double
     let priceChange24h: Double
     let lastUpdate: String
-    let low24h: Int
-    let high24h: Int
-    let allTimeHighPrice: Int
+    let low24h: Double
+    let high24h: Double
+    let allTimeHighPrice: Double
     let allTimeHighPriceDate: String
-    let allTimeLowPrice: Int
+    let allTimeLowPrice: Double
     let allTimeLowPriceDate: String
     let marketCap: Int
     let fullyDilutedValue: Int
