@@ -68,6 +68,7 @@ final class CoinInfoViewModel: BaseViewModel {
         
         // 인기 검색어 탭
         input.coinItemSelected
+            .distinctUntilChanged()
             .map { coinItems.value[$0.row].item.id }
             .bind(with: self) { owner, value in
                 selectedCoinItem.accept(value)

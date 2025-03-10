@@ -30,6 +30,7 @@ final class SearchDetailViewModel: BaseViewModel {
         let coinDetailInfo: BehaviorRelay<CoinMarket> = BehaviorRelay(value: CoinMarket.empty)
         
         detailCoinId
+            .distinctUntilChanged()
             .flatMapLatest {
                 CoingeckoNetworkManager.shared.getTrending(api: .geckoCoinMarket(id: $0), type: [CoinMarket].self)
                     .catch { _ in
