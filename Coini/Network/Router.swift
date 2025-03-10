@@ -52,7 +52,8 @@ enum Router {
         case .geckoCoinMarket(let id):
             return [
                 "vs_currency": "krw",
-                "ids": id
+                "ids": id,
+                "sparkline": "true"
             ]
         }
     }
