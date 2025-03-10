@@ -24,6 +24,7 @@ final class SearchViewModel: BaseViewModel {
         let headerItems: BehaviorRelay<[HeaderItem]>
         let scrollToIndex: BehaviorRelay<Int>
         let detailViews: BehaviorRelay<[UIViewController]>
+        let showDetailCoin: PublishRelay<String>
     }
     
     let headerItems = [
@@ -101,10 +102,12 @@ final class SearchViewModel: BaseViewModel {
             .disposed(by: disposeBag)
         
         return Output(
-            searchKeyword: searchKeyword, bacButtonTapped: input.bacButtonTapped,
+            searchKeyword: searchKeyword,
+            bacButtonTapped: input.bacButtonTapped,
             headerItems: headerItems,
             scrollToIndex: scrollToIndex,
-            detailViews: BehaviorRelay(value: detailViews)
+            detailViews: BehaviorRelay(value: detailViews),
+            showDetailCoin: coinVC.viewModel.detailCoinId
         )
     }
     

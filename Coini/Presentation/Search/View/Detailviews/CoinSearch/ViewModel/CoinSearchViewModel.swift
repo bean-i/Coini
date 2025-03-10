@@ -12,7 +12,7 @@ import RxCocoa
 final class CoinSearchViewModel: BaseViewModel {
     
     struct Input {
-        
+        let coinSelected: ControlEvent<IndexPath>
     }
     
     struct Output {
@@ -20,6 +20,7 @@ final class CoinSearchViewModel: BaseViewModel {
     }
     
     let searchKeyword = BehaviorRelay(value: "empty")
+    let detailCoinId = PublishRelay<String>()
     let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
@@ -48,7 +49,13 @@ final class CoinSearchViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
-        
+        // 테이블뷰 탭
+        input.coinSelected
+            .map { searchResults.value[$0.row].id }
+            .bind(with: self) { owner, value in
+                owner.detailCoinId.accept(value)
+            }
+            .disposed(by: disposeBag)
         
         return Output(searchResults: searchResults)
     }

@@ -73,6 +73,15 @@ final class SearchViewController: BaseViewController<SearchView> {
             }
             .disposed(by: disposeBag)
         
+        // 코인디테일화면의 테이블뷰 선택 -> 화면 전환
+        output.showDetailCoin
+            .bind(with: self) { owner, value in
+                let vc = SearchDetailViewController()
+                vc.viewModel.detailCoinId.accept(value)
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         // 헤더 탭했을 때 자동 scroll 적용
         output.scrollToIndex
             .observe(on: MainScheduler.instance)
