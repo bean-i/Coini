@@ -32,6 +32,7 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
             .bind(with: self) { owner, value in
                 owner.mainView.configureData(data: value)
                 owner.mainView.configureNavigation(title: value.name, image: value.image)
+                owner.mainView.configureChart(data: value.sparkline.price)
             }
             .disposed(by: disposeBag)
         

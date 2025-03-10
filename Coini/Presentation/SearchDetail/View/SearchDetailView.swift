@@ -24,7 +24,7 @@ final class SearchDetailView: BaseView {
     let statusImageView = UIImageView()
     let statusPercent = UILabel()
     
-    let coinChart = PriceChart(test:"안녕")
+    let coinChart = PriceChart(chartData: ChartData())
     lazy var hostingController = UIHostingController(rootView: coinChart)
 
     let updateTime = UILabel()
@@ -127,7 +127,7 @@ final class SearchDetailView: BaseView {
         hostingController.view.snp.makeConstraints { make in
             make.top.equalTo(statusPercent.snp.bottom).offset(5)
             make.horizontalEdges.equalToSuperview().inset(20)
-            make.height.equalTo(300)
+            make.height.equalTo(200)
         }
         
         updateTime.snp.makeConstraints { make in
@@ -199,8 +199,6 @@ final class SearchDetailView: BaseView {
         statusImageView.contentMode = .scaleAspectFill
         statusPercent.font = .boldSystemFont(ofSize: 12)
         
-        hostingController.view.backgroundColor = .customRed
-        
         updateTime.font = .systemFont(ofSize: 9, weight: .regular)
         updateTime.textColor = .customDarkGray
         
@@ -241,6 +239,10 @@ final class SearchDetailView: BaseView {
         } else {
             navImageView.image = UIImage(systemName: "square.3.layers.3d.down.left.slash")
         }
+    }
+    
+    func configureChart(data: [Double]) {
+        coinChart.chartData.chartPrices = data
     }
     
     func configureData(data: CoinMarket) {
