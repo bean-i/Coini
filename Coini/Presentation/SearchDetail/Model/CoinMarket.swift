@@ -23,6 +23,7 @@ struct CoinMarket: Decodable {
     let marketCap: Int
     let fullyDilutedValue: Int
     let totalVolume: Int
+    let sparkline: SparkLinePrice
     
     enum CodingKeys: String, CodingKey {
         case id, name, image
@@ -38,7 +39,12 @@ struct CoinMarket: Decodable {
         case marketCap = "market_cap"
         case fullyDilutedValue = "fully_diluted_valuation"
         case totalVolume = "total_volume"
+        case sparkline = "sparkline_in_7d"
     }
+}
+
+struct SparkLinePrice: Decodable {
+    let price: [Double]
 }
 
 extension CoinMarket {
@@ -57,6 +63,7 @@ extension CoinMarket {
         allTimeLowPriceDate: "empty",
         marketCap: 0,
         fullyDilutedValue: 0,
-        totalVolume: 0
+        totalVolume: 0,
+        sparkline: SparkLinePrice(price: [])
     )
 }
