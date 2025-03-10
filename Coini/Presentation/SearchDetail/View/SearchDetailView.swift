@@ -15,7 +15,8 @@ final class SearchDetailView: BaseView {
     let navStackView = UIStackView()
     let navImageView = UIImageView()
     let navTitleLabel = UILabel()
-    let navButton = UIBarButtonItem()
+
+    let navButton = StarButton()
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -185,9 +186,6 @@ final class SearchDetailView: BaseView {
         navImageView.contentMode = .scaleAspectFit
         navImageView.layer.cornerRadius = 13
         
-        navButton.image = UIImage(systemName: "star")
-        navButton.tintColor = .customNavy
-        
         navTitleLabel.font = .boldSystemFont(ofSize: 16)
         navTitleLabel.textColor = .customNavy
         
@@ -231,7 +229,7 @@ final class SearchDetailView: BaseView {
         totalVolume.titleLabel.text = "총 거래량"
     }
     
-    func configureNavigation(title: String, image: String) {
+    func configureNavigation(title: String, image: String, coinID: String) {
         navTitleLabel.text = title
         
         if let url = URL(string: image) {
@@ -239,6 +237,8 @@ final class SearchDetailView: BaseView {
         } else {
             navImageView.image = UIImage(systemName: "square.3.layers.3d.down.left.slash")
         }
+        
+        navButton.id = coinID
     }
     
     func configureChart(data: [Double]) {
