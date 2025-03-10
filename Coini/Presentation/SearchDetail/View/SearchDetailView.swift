@@ -164,21 +164,14 @@ final class SearchDetailView: BaseView {
         
         scrollView.showsVerticalScrollIndicator = false
         
-        currentPrice.font = .boldSystemFont(ofSize: 16)
+        currentPrice.font = .systemFont(ofSize: 18, weight: .heavy)
         currentPrice.textColor = .customNavy
-        currentPrice.text = "dksjlakjdlskjdfl;kj"
         
         statusImageView.contentMode = .scaleAspectFill
-        statusImageView.image = UIImage(systemName: "star")
-        statusImageView.tintColor = .customBlue
-        
-        statusPercent.font = .boldSystemFont(ofSize: 9)
-        statusPercent.text = "0.98%"
-        statusPercent.textColor = .customBlue
+        statusPercent.font = .boldSystemFont(ofSize: 12)
         
         hostingController.view.backgroundColor = .customRed
         
-        updateTime.text = "a;lsdkjfldjqq"
         updateTime.font = .systemFont(ofSize: 9, weight: .regular)
         updateTime.textColor = .customDarkGray
         
@@ -191,22 +184,13 @@ final class SearchDetailView: BaseView {
         stackView24.spacing = 100
         
         lowPrice24.titleLabel.text = "24시간 고가"
-        lowPrice24.priceLabel.text = "1238712893"
-        
         highPrice24.titleLabel.text = "24시간 저가"
-        highPrice24.priceLabel.text = "1238712893"
         
         stackViewAllTime.axis = .horizontal
         stackViewAllTime.spacing = 100
         
         allTimeHighPrice.titleLabel.text = "역대 최고가"
-        allTimeHighPrice.priceLabel.text = "1238712893"
-        allTimeHighPrice.dateLabel.text = "25년 1월 20일"
-        
         allTimeLowPrice.titleLabel.text = "역대 최저가"
-        allTimeLowPrice.priceLabel.text = "1238712893"
-        allTimeLowPrice.dateLabel.text = "25년 1월 20일"
-        
         investInfoHeader.titleLabel.text = "투자지표"
         
         investView.backgroundColor = .customLightGray
@@ -216,14 +200,58 @@ final class SearchDetailView: BaseView {
         investPriceStackView.spacing = 10
         
         marketCap.titleLabel.text = "시가총액"
-        marketCap.priceLabel.text = "129837492"
-        
         fullDilutedValue.titleLabel.text = "완전 희석 가치(FDV)"
-        fullDilutedValue.priceLabel.text = "389741298743897432987"
-        
         totalVolume.titleLabel.text = "총 거래량"
-        totalVolume.priceLabel.text = "23804395908543"
+    }
+    
+    func configureData(data: CoinMarket) {
+        // 현재 가격
+        currentPrice.text = "￦\(String(describing: NumberFormatter.formatted(data.currentPrice as NSNumber)))"
         
+        // 변동폭
+        let change = data.priceChange24h
+        if change > 0 {
+            statusImageView.image = UIImage(systemName: "arrowtriangle.up.fill")
+            statusPercent.text = "\(change.commonRound())%"
+            statusImageView.tintColor = .customRed
+            statusPercent.textColor = .customRed
+        } else if change < 0 {
+            statusImageView.image = UIImage(systemName: "arrowtriangle.down.fill")
+            statusPercent.text = "\(change.commonRound())%"
+            statusImageView.tintColor = .customBlue
+            statusPercent.textColor = .customBlue
+        } else {
+            statusPercent.text = "0.00%"
+            statusPercent.textColor = .black
+        }
+        
+        // 업데이트 날짜
+        updateTime.text = "\(DateFormatter.monthDayDate(data.lastUpdate)) 업데이트"
+        
+        // 24시간 고가
+        highPrice24.priceLabel.text = "￦\(NumberFormatter.formatted(data.high24h as NSNumber))"
+//        highPrice24.priceLabel.text = "32489712347890123407983412890743218970324978"
+        
+        // 24시간 저가
+        lowPrice24.priceLabel.text = "￦\(NumberFormatter.formatted(data.low24h as NSNumber))"
+//        lowPrice24.priceLabel.text = "912740938014327812347908432190784321908743218970"
+        
+        // 역대 최고가
+        allTimeHighPrice.priceLabel.text = "￦\(NumberFormatter.formatted(data.allTimeHighPrice as NSNumber))"
+        allTimeHighPrice.dateLabel.text = DateFormatter.yearMonthDay(data.allTimeHighPriceDate)
+
+        // 역대 최저가
+        allTimeLowPrice.priceLabel.text = "￦\(NumberFormatter.formatted(data.allTimeLowPrice as NSNumber))"
+        allTimeLowPrice.dateLabel.text = DateFormatter.yearMonthDay(data.allTimeLowPriceDate)
+        
+        // 시가총액
+        marketCap.priceLabel.text = "￦\(NumberFormatter.formatted(data.marketCap as NSNumber))"
+        
+        // 완전 희석 가치
+        fullDilutedValue.priceLabel.text = "￦\(NumberFormatter.formatted(data.fullyDilutedValue as NSNumber))"
+        
+        // 총 거래량
+        totalVolume.priceLabel.text = "￦\(NumberFormatter.formatted(data.totalVolume as NSNumber))"
     }
     
 }
