@@ -36,6 +36,7 @@ struct SearchCoin: Decodable {
 }
 
 struct Item: Decodable {
+    let id: String
     let symbol: String
     let name: String
     let thumb: String
