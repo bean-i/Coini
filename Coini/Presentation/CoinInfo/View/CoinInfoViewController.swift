@@ -44,7 +44,6 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
         // 코인 상세 화면
         output.selectedCoinItem
             .bind(with: self) { owner, value in
-                print(value)
                 let vc = SearchDetailViewController()
                 vc.viewModel.detailCoinId.accept(value)
                 owner.navigationController?.pushViewController(vc, animated: true)
