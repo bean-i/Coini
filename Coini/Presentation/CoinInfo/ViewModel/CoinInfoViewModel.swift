@@ -14,6 +14,7 @@ final class CoinInfoViewModel: BaseViewModel {
     struct Input {
         let viewDidLoadTrigger: Observable<Int>
         let searchButtonTapped: Observable<String>
+        let coinItemSelected: ControlEvent<IndexPath>
     }
     
     struct Output {
@@ -21,14 +22,20 @@ final class CoinInfoViewModel: BaseViewModel {
         let NFTItems: BehaviorRelay<[SearchNFT]>
         let networkTime: BehaviorRelay<Date>
         let searchButtonTapped: Observable<String>
+        let selectedCoinItem: PublishRelay<String>
     }
     
     let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
+        // 인기 검색어
         let coinItems: BehaviorRelay<[SearchCoin]> = BehaviorRelay(value: [])
+        // 인기 NFT
         let NFTItems: BehaviorRelay<[SearchNFT]> = BehaviorRelay(value: [])
+        // 네트워크 통신 시간
         let networkTime: BehaviorRelay<Date> = BehaviorRelay(value: Date())
+        // 인기검색어 탭 정보
+        let selectedCoinItem = PublishRelay<String>()
         
         // 화면 진입 + 10분마다 네트워크 통신
         Observable.merge(
@@ -59,12 +66,21 @@ final class CoinInfoViewModel: BaseViewModel {
             }
             .disposed(by: disposeBag)
         
+        // 인기 검색어 탭
+        input.coinItemSelected
+            .map { coinItems.value[$0.row].item.id }
+            .bind(with: self) { owner, value in
+                selectedCoinItem.accept(value)
+            }
+            .disposed(by: disposeBag)
+        
         
         return Output(
             coinItems: coinItems,
             NFTItems: NFTItems,
             networkTime: networkTime,
-            searchButtonTapped: input.searchButtonTapped
+            searchButtonTapped: input.searchButtonTapped,
+            selectedCoinItem: selectedCoinItem
         )
     }
     
