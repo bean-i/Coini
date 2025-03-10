@@ -33,6 +33,7 @@ final class InfoPrice: BaseView {
     
     override func configureView() {
         contentStackView.axis = .vertical
+        contentStackView.spacing = 2
         
         titleLabel.font = .systemFont(ofSize: 12, weight: .regular)
         titleLabel.textColor = .customDarkGray
