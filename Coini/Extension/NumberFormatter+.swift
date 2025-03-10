@@ -12,7 +12,10 @@ extension NumberFormatter {
     static let formatted = { value in
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        return formatter.string(from: value)
+        guard let result = formatter.string(from: value) else {
+            return "0.00"
+        }
+        return result
     }
     
 }
