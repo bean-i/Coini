@@ -12,11 +12,14 @@ import RxCocoa
 final class SearchDetailViewModel: BaseViewModel {
     
     struct Input {
-        
+        let stockMoreButtonTapped: ControlEvent<Void>
+        let investMoreButtonTapped: ControlEvent<Void>
     }
     
     struct Output {
         let coinDetailInfo: BehaviorRelay<CoinMarket>
+        let stockMoreButtonTapped: ControlEvent<Void>
+        let investMoreButtonTapped: ControlEvent<Void>
     }
     
     let detailCoinId: BehaviorRelay<String> = BehaviorRelay(value: "bitcoin")
@@ -46,7 +49,11 @@ final class SearchDetailViewModel: BaseViewModel {
             .disposed(by: disposeBag)
 
         
-        return Output(coinDetailInfo: coinDetailInfo)
+        return Output(
+            coinDetailInfo: coinDetailInfo,
+            stockMoreButtonTapped: input.stockMoreButtonTapped,
+            investMoreButtonTapped: input.investMoreButtonTapped
+        )
     }
     
 }
