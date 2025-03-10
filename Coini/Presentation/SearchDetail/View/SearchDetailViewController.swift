@@ -15,6 +15,11 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
     let viewModel = SearchDetailViewModel()
     let disposeBag = DisposeBag()
     
+    override func configureNavigation() {
+        navigationItem.titleView = mainView.navStackView
+        navigationItem.rightBarButtonItem = mainView.navButton
+    }
+    
     override func bind() {
         let input = SearchDetailViewModel.Input(
             stockMoreButtonTapped: mainView.stockInfoHeader.moreButton.rx.tap,
@@ -26,6 +31,7 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
         output.coinDetailInfo
             .bind(with: self) { owner, value in
                 owner.mainView.configureData(data: value)
+                owner.mainView.configureNavigation(title: value.name, image: value.image)
             }
             .disposed(by: disposeBag)
         

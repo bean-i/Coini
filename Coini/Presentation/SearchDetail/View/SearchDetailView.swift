@@ -8,8 +8,14 @@
 import UIKit
 import SwiftUI
 import SnapKit
+import Kingfisher
 
 final class SearchDetailView: BaseView {
+    
+    let navStackView = UIStackView()
+    let navImageView = UIImageView()
+    let navTitleLabel = UILabel()
+    let navButton = UIBarButtonItem()
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -40,6 +46,11 @@ final class SearchDetailView: BaseView {
     let totalVolume = InfoPrice()
     
     override func configureHierarchy() {
+        navStackView.addArrangedSubviews(
+            navImageView,
+            navTitleLabel
+        )
+        
         stackView24.addArrangedSubviews(
             lowPrice24,
             highPrice24
@@ -82,6 +93,10 @@ final class SearchDetailView: BaseView {
     }
     
     override func configureLayout() {
+        navImageView.snp.makeConstraints { make in
+            make.size.equalTo(26)
+        }
+        
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(safeAreaLayoutGuide)
         }
@@ -162,6 +177,20 @@ final class SearchDetailView: BaseView {
     override func configureView() {
         backgroundColor = .white
         
+        navStackView.axis = .horizontal
+        navStackView.spacing = 5
+        navStackView.alignment = .center
+        
+        navImageView.clipsToBounds = true
+        navImageView.contentMode = .scaleAspectFit
+        navImageView.layer.cornerRadius = 13
+        
+        navButton.image = UIImage(systemName: "star")
+        navButton.tintColor = .customNavy
+        
+        navTitleLabel.font = .boldSystemFont(ofSize: 16)
+        navTitleLabel.textColor = .customNavy
+        
         scrollView.showsVerticalScrollIndicator = false
         
         currentPrice.font = .systemFont(ofSize: 18, weight: .heavy)
@@ -202,6 +231,16 @@ final class SearchDetailView: BaseView {
         marketCap.titleLabel.text = "시가총액"
         fullDilutedValue.titleLabel.text = "완전 희석 가치(FDV)"
         totalVolume.titleLabel.text = "총 거래량"
+    }
+    
+    func configureNavigation(title: String, image: String) {
+        navTitleLabel.text = title
+        
+        if let url = URL(string: image) {
+            navImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "arrowshape.down"))
+        } else {
+            navImageView.image = UIImage(systemName: "square.3.layers.3d.down.left.slash")
+        }
     }
     
     func configureData(data: CoinMarket) {
