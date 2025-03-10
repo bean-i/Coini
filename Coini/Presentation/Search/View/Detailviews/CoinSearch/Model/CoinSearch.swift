@@ -12,6 +12,7 @@ struct CoinSearch: Decodable {
 }
 
 struct DetailCoin: Decodable {
+    let id: String
     let name: String
     let symbol: String
     let rank: Int
@@ -19,7 +20,7 @@ struct DetailCoin: Decodable {
     let large: String
     
     enum CodingKeys: String, CodingKey {
-        case name, symbol, thumb, large
+        case id, name, symbol, thumb, large
         case rank = "market_cap_rank"
     }
 }
