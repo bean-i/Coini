@@ -17,7 +17,7 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
     
     override func configureNavigation() {
         navigationItem.titleView = mainView.navStackView
-        navigationItem.rightBarButtonItem = mainView.navButton
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: mainView.navButton)
     }
     
     override func bind() {
@@ -27,11 +27,22 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
         )
         let output = viewModel.transform(input: input)
         
+        mainView.navButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.mainView.navButton.updateStatus()
+                if owner.mainView.navButton.isSelected {
+                    owner.view.makeToast("\(owner.mainView.navTitleLabel.text ?? "")이(가) 즐겨찾기 되었습니다.")
+                } else {
+                    owner.view.makeToast("\(owner.mainView.navTitleLabel.text ?? "")이(가) 즐겨찾기에서 제거되었습니다.")
+                }
+            }
+            .disposed(by: disposeBag)
+        
         // 메인뷰 데이터 나타내기
         output.coinDetailInfo
             .bind(with: self) { owner, value in
                 owner.mainView.configureData(data: value)
-                owner.mainView.configureNavigation(title: value.name, image: value.image)
+                owner.mainView.configureNavigation(title: value.name, image: value.image, coinID: value.id)
                 owner.mainView.configureChart(data: value.sparkline.price)
             }
             .disposed(by: disposeBag)
