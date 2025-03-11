@@ -18,6 +18,11 @@ final class SearchViewController: BaseViewController<SearchView> {
         super.viewDidLayoutSubviews()
         viewModel.deviceWidth = view.frame.width
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.updateData.accept(())
+    }
 
     override func configureNavigation() {
         navigationItem.leftBarButtonItems = [
@@ -33,7 +38,8 @@ final class SearchViewController: BaseViewController<SearchView> {
         let input = SearchViewModel.Input(
             bacButtonTapped: mainView.backButton.rx.tap,
             searchButtonTapped: mainView.searchTextField.rx.controlEvent(.editingDidEndOnExit)
-                .withLatestFrom(mainView.searchTextField.rx.text.orEmpty),
+                .withLatestFrom(mainView.searchTextField.rx.text.orEmpty)
+                .distinctUntilChanged(),
             tabSelected: mainView.headerTabCollectionView.rx.itemSelected,
             swipe: mainView.pageCollectionView.rx.didScroll
                 .filter { scrolledByUser }

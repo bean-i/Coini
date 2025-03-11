@@ -35,6 +35,7 @@ final class SearchViewModel: BaseViewModel {
     
 //    var searchKeyword = "empty"
     let searchKeyword = BehaviorRelay(value: "empty")
+    let updateData: BehaviorRelay<Void> = BehaviorRelay(value: ())
     var deviceWidth: CGFloat = 0
     let disposeBag = DisposeBag()
     
@@ -50,13 +51,19 @@ final class SearchViewModel: BaseViewModel {
         
         let changedIndex = BehaviorRelay(value: IndexPath(row: 0, section: 0))
         
+        updateData
+            .bind(to: coinVC.viewModel.updateDataTrigger)
+            .disposed(by: disposeBag)
+        
         // searchKeyword -> 코인뷰모델에 전달 (-> 통신)
         searchKeyword
+            .distinctUntilChanged()
             .bind(to: coinVC.viewModel.searchKeyword)
             .disposed(by: disposeBag)
         
         // 텍스트필드 서치탭 -> searchKeyword에 전달
         input.searchButtonTapped
+            .distinctUntilChanged()
             .bind(to: searchKeyword)
             .disposed(by: disposeBag)
         
