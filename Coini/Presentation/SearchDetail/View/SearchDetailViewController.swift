@@ -30,9 +30,11 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
         
         // 네트워크 단절 or 네트워크 에러
         output.networkDisconnected
+            .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, message in
-                print("네트워크 단절")
-                Loading.shared.hideLoading()
+                DispatchQueue.main.async {
+                    Loading.shared.hideLoading()
+                }
                 let vc = NetworkPopViewController()
                 vc.mainView.retryButton.rx.tap
                     .bind(with: self, onNext: { owner, _ in
@@ -49,6 +51,7 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
         
         // 뷰디드로드 -> 인디케이터 show
         output.viewDidLoadTrigger
+            .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 Loading.shared.showLoading()
             }
@@ -56,6 +59,7 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
         
         // 통신 완료 -> 인디케이터 hide
         output.networkCompleted
+            .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 Loading.shared.hideLoading()
             }

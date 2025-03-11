@@ -92,7 +92,6 @@ final class SearchViewModel: BaseViewModel {
         // currentIndex 업데이트: 뷰컨에서 자동 스크롤
         changedIndex
             .map { item in
-                print("인덱스 받았어뵤", item)
                 for index in 0..<updatedItems.count {
                     if index == item.item {
                         updatedItems[index].isSelected = true

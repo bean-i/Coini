@@ -78,7 +78,7 @@ final class CoinInfoViewModel: BaseViewModel {
             if networkConnected.value == .disconnect || networkConnected.value == .unknown {
                 print("인터넷 연결이 안 돼있는 것 같아요!!")
                 networkDisConnected.accept(AFError.network.description)
-                return Single<Trending>.error(URLError(.notConnectedToInternet))
+                return Single.just(Trending.empty)
             } else {
                 return CoingeckoNetworkManager.shared.getTrending(api: .geckoTrending, type: Trending.self)
                     .catch { error in

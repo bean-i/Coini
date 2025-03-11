@@ -19,6 +19,7 @@ final class ExchangeViewModel: BaseViewModel {
     struct Output {
         let coinItems: BehaviorRelay<[Ticker]>
         let networkDisconnected: PublishRelay<APIErrorMessage>
+        let showToast: BehaviorRelay<String>
     }
     
     let restartNetwork = BehaviorRelay(value: 0)
@@ -33,6 +34,7 @@ final class ExchangeViewModel: BaseViewModel {
         let networkConnected = NetworkMonitor.shared.networkStatus
         // 인터넷 연결 끊김
         let networkDisConnected = PublishRelay<APIErrorMessage>()
+        let showToast = BehaviorRelay(value: "")
         
         // 화면 진입 + 5초마다 네트워크 통신
         Observable.merge(
@@ -40,11 +42,9 @@ final class ExchangeViewModel: BaseViewModel {
             Observable<Int>.interval(.seconds(5), scheduler: MainScheduler.instance),
             restartNetwork.asObservable()
         )
-        .debug("네트워크 통신 시도 시작")
         .flatMapLatest { _ in
-            print("현재 연결 상태는..:", networkConnected.value)
             if networkConnected.value == .disconnect || networkConnected.value == .unknown {
-                print("인터넷 연결이 안 돼있는 것 같아요!!")
+                showToast.accept("네트워크 통신이 원활하지 않습니다.")
                 networkDisConnected.accept(AFError.network.description)
                 return Single.just([Ticker.empty])
             } else {
@@ -92,7 +92,8 @@ final class ExchangeViewModel: BaseViewModel {
         
         return Output(
             coinItems: coinItems,
-            networkDisconnected: networkDisConnected
+            networkDisconnected: networkDisConnected,
+            showToast: showToast
         )
     }
     

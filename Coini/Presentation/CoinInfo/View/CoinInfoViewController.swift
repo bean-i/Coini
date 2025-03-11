@@ -82,7 +82,6 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
         // 검색
         output.searchButtonTapped
             .bind(with: self) { owner, value in
-                print(value)
                 if !value.trimmingCharacters(in: .whitespaces).isEmpty {
                     // 화면 전환
                     let vc = SearchViewController()

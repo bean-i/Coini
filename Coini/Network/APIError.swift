@@ -35,8 +35,10 @@ enum AFError: Error {
             )
         case .geckoError(code: let code):
             switch code {
-            case 400, 401, 403, 429:
+            case 400, 401, 403:
                 return APIErrorMessage(name: "안내", message: "잘못된 요청입니다. 다시 시도해 주세요.")
+            case 429:
+                return APIErrorMessage(name: "안내", message: "호출 횟수 제한을 다 사용하셨습니다.")
             case 500, 503:
                 return APIErrorMessage(name: "안내", message: "서버에서 문제가 발생했습니다. 나중에 다시 시도해 주세요.")
             default:

@@ -54,28 +54,7 @@ final class NetworkMonitor {
         }
         self.monitor.start(queue: DispatchQueue.global())
     }
-    
-    
-    
-    
-//    func startMonitoring() {
-//        print(#function)
-//        monitor.start(queue: queue)
-//        
-//        monitor.pathUpdateHandler = { [weak self] path in
-//            print("⭐️⭐️⭐️⭐️", path.status)
-//            switch path.status {
-//            case .satisfied:
-//                self?.networkStatus.accept(.connect)
-//            case .unsatisfied,
-//                    .requiresConnection:
-//                self?.networkStatus.accept(.disconnect)
-//            @unknown default:
-//                return
-//            }
-//        }
-//    }
-    
+
     func stopMonitoring() {
         monitor.cancel()
     }

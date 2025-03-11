@@ -8,15 +8,12 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Toast
 
 final class ExchangeViewController: BaseViewController<ExchangeView> {
     
     private let viewModel = ExchangeViewModel()
     private let disposeBag = DisposeBag()
-    
-    deinit {
-        print("ExchangeViewController Deinit")
-    }
     
     override func configureNavigation() {
         let titleLabel = UILabel()
@@ -81,7 +78,6 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
         // 네트워크 단절 or 네트워크 에러
         output.networkDisconnected
             .subscribe(with: self) { owner, message in
-                print("💕💕💕💕💕💕")
                 let vc = NetworkPopViewController()
                 vc.mainView.retryButton.rx.tap
                     .bind(with: self, onNext: { owner, _ in
@@ -97,9 +93,10 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
             }
             .disposed(by: disposeBag)
         
-//        restartButton.subscribe(with: self) { owner, _ in
-//            print("재시작 버튼 탭")
-//        }
-//        .disposed(by: disposeBag)
+        output.showToast
+            .bind(with: self) { owner, value in
+                owner.view.makeToast(value)
+            }
+            .disposed(by: disposeBag)
     }
 }

@@ -41,10 +41,9 @@ final class SearchDetailViewModel: BaseViewModel {
         detailCoinId
             .distinctUntilChanged()
             .flatMapLatest {
-                print("===-----====----====----====----")
                 if networkConnected.value == .disconnect || networkConnected.value == .unknown {
                     networkDisConnected.accept(AFError.network.description)
-                    return Single<[CoinMarket]>.error(URLError(.notConnectedToInternet))
+                    return Single.just([CoinMarket.empty])
                 } else {
                     return CoingeckoNetworkManager.shared.getTrending(api: .geckoCoinMarket(id: $0), type: [CoinMarket].self)
                         .catch { error in
@@ -65,8 +64,6 @@ final class SearchDetailViewModel: BaseViewModel {
                 coinDetailInfo.accept(value)
                 networkCompleted.accept(true)
             } onError: { owner, error in
-                print("😢", error)
-                networkDisConnected.accept(AFError.network.description)
             } onCompleted: { owner in
                 print("onCompleted")
             } onDisposed: { owner in

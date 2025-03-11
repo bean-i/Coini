@@ -65,8 +65,6 @@ final class SearchViewController: BaseViewController<SearchView> {
         output.headerItems
             .observe(on: MainScheduler.instance)
             .bind(to: mainView.headerTabCollectionView.rx.items(cellIdentifier: HeaderTabCollectionViewCell.identifier, cellType: HeaderTabCollectionViewCell.self)) { (row, element, cell) in
-                print("🔥🔥🔥🔥🔥")
-                print(element)
                 cell.configureData(data: element)
             }
             .disposed(by: disposeBag)
@@ -74,7 +72,6 @@ final class SearchViewController: BaseViewController<SearchView> {
         // 페이지뷰
         output.detailViews
             .bind(to: mainView.pageCollectionView.rx.items(cellIdentifier: PageCollectionViewCell.identifier, cellType: PageCollectionViewCell.self)) { (row, element, cell) in
-                print("🔍🔍🔍🔍🔍🔍")
                 cell.configureData(data: element)
             }
             .disposed(by: disposeBag)
