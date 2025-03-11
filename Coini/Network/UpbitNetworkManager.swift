@@ -20,7 +20,7 @@ final class UpbitNetworkManager {
                                   type: T.Type) -> Single<T> {
         return Single.create { single in
             guard let endpoint = api.endpoint else {
-                print("endpoint가 없음")
+                single(.failure(AFError.invalidURL))
                 return Disposables.create {
                     print("통신 종료")
                 }
@@ -30,13 +30,22 @@ final class UpbitNetworkManager {
                        method: api.method,
                        parameters: api.parameters,
                        encoding: URLEncoding.queryString)
+            .validate(statusCode: 200..<300)
             .responseDecodable(of: T.self) { response in
                 switch response.result {
                 case .success(let value):
                     single(.success(value))
                 case .failure(let error):
-                    print(error)
-                    single(.failure(error))
+                    if let data = response.data {
+                        do {
+                            let decodeData = try JSONDecoder().decode(UpbitError.self, from: data)
+                            single(.failure(AFError.upbitError(message: decodeData.error)))
+                        } catch { // alamofire 에러
+                            single(.failure(AFError.afError))
+                        }
+                    } else {
+                        single(.failure(AFError.afError))
+                    }
                 }
             }
             
