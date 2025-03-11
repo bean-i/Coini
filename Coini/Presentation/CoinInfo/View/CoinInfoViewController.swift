@@ -24,7 +24,6 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
     
     override func bind() {
         let input = CoinInfoViewModel.Input(
-            viewDidLoadTrigger: Observable.just(0),
             searchButtonTapped: mainView.searchBar.rx.searchButtonClicked
                 .withUnretained(self)
                 .map { owner, _ in owner.mainView.searchBar.resignFirstResponder()

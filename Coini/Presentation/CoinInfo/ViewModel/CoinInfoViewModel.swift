@@ -12,7 +12,6 @@ import RxCocoa
 final class CoinInfoViewModel: BaseViewModel {
     
     struct Input {
-        let viewDidLoadTrigger: Observable<Int>
         let searchButtonTapped: Observable<String>
         let coinItemSelected: ControlEvent<IndexPath>
     }
@@ -26,27 +25,50 @@ final class CoinInfoViewModel: BaseViewModel {
         let networkDisconnected: PublishRelay<APIErrorMessage>
     }
     
+    let appLoad = Observable.just(())
     let disposeBag = DisposeBag()
+    
+    init() {
+        appLoad
+            .flatMapLatest { _ in
+                CoingeckoNetworkManager.shared.getTrending(api: .geckoTrending, type: Trending.self)
+                    .catch { error in
+                        return Single.just(Trending.empty)
+                    }
+            }
+            .map { (Array($0.coins[0..<14]), Array($0.nfts[0..<7])) }
+            .subscribe(with: self) { owner, value in
+                print("2️⃣2️⃣2️⃣통신 완료(성공/실패)2️⃣2️⃣2️⃣")
+                owner.coinItems.accept(value.0)
+                owner.NFTItems.accept(value.1)
+                owner.networkTime.accept(Date())
+            } onError: { owner, error in
+                print("error", error)
+            } onCompleted: { owner in
+                print("onCompleted")
+            } onDisposed: { owner in
+                print("onDisposed")
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    // 인기 검색어
+    let coinItems: BehaviorRelay<[SearchCoin]> = BehaviorRelay(value: [])
+    // 인기 NFT
+    let NFTItems: BehaviorRelay<[SearchNFT]> = BehaviorRelay(value: [])
+    // 네트워크 통신 시간
+    let networkTime: BehaviorRelay<Date> = BehaviorRelay(value: Date())
     
     func transform(input: Input) -> Output {
         // 인터넷 연결 상태
         let networkConnected = NetworkMonitor.shared.networkStatus
         // 인터넷 연결 끊김
         let networkDisConnected = PublishRelay<APIErrorMessage>()
-        // 인기 검색어
-        let coinItems: BehaviorRelay<[SearchCoin]> = BehaviorRelay(value: [])
-        // 인기 NFT
-        let NFTItems: BehaviorRelay<[SearchNFT]> = BehaviorRelay(value: [])
-        // 네트워크 통신 시간
-        let networkTime: BehaviorRelay<Date> = BehaviorRelay(value: Date())
         // 인기검색어 탭 정보
         let selectedCoinItem = PublishRelay<String>()
         
-        // 화면 진입 + 10분마다 네트워크 통신
-        Observable.merge(
-            input.viewDidLoadTrigger.asObservable(),
-            Observable<Int>.interval(.seconds(600), scheduler: MainScheduler.instance)
-        )
+        // 10분마다 네트워크 통신
+        Observable<Int>.interval(.seconds(600), scheduler: MainScheduler.instance)
         .flatMapLatest { _ in
             print("현재 연결 상태는..:", networkConnected.value)
             if networkConnected.value == .disconnect || networkConnected.value == .unknown {
@@ -71,9 +93,9 @@ final class CoinInfoViewModel: BaseViewModel {
         .map { (Array($0.coins[0..<14]), Array($0.nfts[0..<7])) }
         .subscribe(with: self) { owner, value in
             print("2️⃣2️⃣2️⃣통신 완료(성공/실패)2️⃣2️⃣2️⃣")
-            coinItems.accept(value.0)
-            NFTItems.accept(value.1)
-            networkTime.accept(Date())
+            owner.coinItems.accept(value.0)
+            owner.NFTItems.accept(value.1)
+            owner.networkTime.accept(Date())
         } onError: { owner, error in
             print("error", error)
         } onCompleted: { owner in
@@ -86,7 +108,8 @@ final class CoinInfoViewModel: BaseViewModel {
         // 인기 검색어 탭
         input.coinItemSelected
             .distinctUntilChanged()
-            .map { coinItems.value[$0.row].item.id }
+            .withUnretained(self)
+            .map { owner, index in owner.coinItems.value[index.row].item.id }
             .bind(with: self) { owner, value in
                 selectedCoinItem.accept(value)
             }
