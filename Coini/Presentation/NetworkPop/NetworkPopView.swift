@@ -76,9 +76,9 @@ final class NetworkPopView: BaseView {
         retryButton.titleLabel?.font = .boldSystemFont(ofSize: 14)
     }
     
-    func configureMessage(title: String, message: String) {
-        titleLabel.text = title
-        messageLabel.text = message
+    func configureMessage(_ message: APIErrorMessage) {
+        titleLabel.text = message.name
+        messageLabel.text = message.message
     }
     
 }

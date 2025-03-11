@@ -14,14 +14,14 @@ final class ExchangeViewModel: BaseViewModel {
     struct Input {
         let viewDidLoadTrigger: Observable<Int>
         let sortButtonTappedValue: Observable<(SortStandard, SortStatus)>
-        let restartNetwork: PublishRelay<Int>
     }
     
     struct Output {
         let coinItems: BehaviorRelay<[Ticker]>
-        let networkDisconnected: PublishRelay<Void>
+        let networkDisconnected: PublishRelay<APIErrorMessage>
     }
     
+    let restartNetwork = BehaviorRelay(value: 0)
     private let disposeBag = DisposeBag()
     
     func transform(input: Input) -> Output {
@@ -30,40 +30,51 @@ final class ExchangeViewModel: BaseViewModel {
         // 정렬 변수
         let sortBy: BehaviorRelay<(SortStandard, SortStatus)> = BehaviorRelay(value: (.trading, .FALL))
         // 인터넷 연결 상태
-        let networkConnected = BehaviorRelay(value: NetworkStatusType.unknown)
+        let networkConnected = NetworkMonitor.shared.networkStatus
         // 인터넷 연결 끊김
-        let networkDisConnected = PublishRelay<Void>()
+        let networkDisConnected = PublishRelay<APIErrorMessage>()
         
-        NetworkMonitor.shared.networkStatus
-            .subscribe(with: self, onNext: { owner, status in
-                print("✅✅✅✅✅✅")
-                networkConnected.accept(status)
-            })
-            .disposed(by: disposeBag)
+//        input.restartNetwork
+//            .bind(with: self) { owner, _ in
+//                print("뷰모델에서 재시작 버튼 감지")
+//            }
+//            .disposed(by: disposeBag)
         
-        input.restartNetwork.asObservable()
-            .subscribe(with: self) { owner, _ in
-                print("뷰모델에서 버튼 탭 감지")
-            }
-            .disposed(by: disposeBag)
+        // 네트워크 상태
+        
+//        NetworkMonitor.shared.networkStatus
+//            .subscribe(with: self, onNext: { owner, status in
+//                print("✅✅✅✅✅✅")
+//                networkConnected.accept(status)
+//            })
+//            .disposed(by: disposeBag)
         
         // 화면 진입 + 5초마다 네트워크 통신
         Observable.merge(
             input.viewDidLoadTrigger.asObservable(),
-            Observable<Int>.interval(.seconds(5), scheduler: MainScheduler.instance)
+            Observable<Int>.interval(.seconds(5), scheduler: MainScheduler.instance),
+            restartNetwork.asObservable()
         )
-//        .debug("네트워크 통신 시도 시작")
-        .withUnretained(self)
+        .debug("네트워크 통신 시도 시작")
         .flatMapLatest { _ in
             print("현재 연결 상태는..:", networkConnected.value)
             if networkConnected.value == .disconnect || networkConnected.value == .unknown {
                 print("인터넷 연결이 안 돼있는 것 같아요!!")
+                networkDisConnected.accept(AFError.network.description)
                 return Single<[Ticker]>.error(URLError(.notConnectedToInternet))
             } else {
                 return UpbitNetworkManager.shared.getTickers(api: .upbitTickers, type: [Ticker].self)
                     .catch { error in
-                        print("error 방출됨.")
-//                        print(error)
+                        switch error as? AFError {
+                        case .afError:
+                            networkDisConnected.accept(AFError.afError.description)
+                        case .invalidURL:
+                            networkDisConnected.accept(AFError.invalidURL.description)
+                        case .upbitError(let message):
+                            networkDisConnected.accept(message)
+                        default:
+                            break
+                        }
                         return Single.just([Ticker.empty])
                     }
             }
@@ -73,7 +84,6 @@ final class ExchangeViewModel: BaseViewModel {
             print("1️⃣1️⃣1️⃣통신 완료(성공/실패)1️⃣1️⃣1️⃣")
             coinItems.accept(value)
         } onError: { owner, error in
-            networkDisConnected.accept(())
             print("error", error)
         } onCompleted: { owner in
             print("onCompleted")

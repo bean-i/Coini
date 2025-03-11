@@ -33,6 +33,23 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
             coinItemSelected: mainView.keywordCollectionView.rx.itemSelected
         )
         let output = viewModel.transform(input: input)
+        
+        // 네트워크 단절 or 네트워크 에러
+        output.networkDisconnected
+            .subscribe(with: self) { owner, message in
+                let vc = NetworkPopViewController()
+                vc.mainView.retryButton.rx.tap
+                    .bind(with: self, onNext: { owner, _ in
+                        owner.dismiss(animated: true)
+                    })
+                    .disposed(by: owner.disposeBag)
+                
+                vc.mainView.configureMessage(message)
+                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalTransitionStyle = .crossDissolve
+                owner.present(vc, animated: false)
+            }
+            .disposed(by: disposeBag)
 
         // 인기 검색어
         output.coinItems

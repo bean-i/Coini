@@ -84,7 +84,9 @@ final class ExchangeTableViewCell: BaseTableViewCell {
     func configureData(data: Ticker) {
         // 마켓
         let newMarket = data.market.split(separator: "-")
-        titleLabel.text = "\(newMarket[1])/\(newMarket[0])"
+        if newMarket.count >= 2 {
+            titleLabel.text = "\(newMarket[1])/\(newMarket[0])"
+        }
 
         // 현재가
         if data.currentPrice == Double(Int(data.currentPrice)) {

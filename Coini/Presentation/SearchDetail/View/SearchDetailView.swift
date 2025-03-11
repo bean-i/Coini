@@ -12,6 +12,7 @@ import Kingfisher
 
 final class SearchDetailView: BaseView {
     
+//    let loadingView = Loading()
     let navStackView = UIStackView()
     let navImageView = UIImageView()
     let navTitleLabel = UILabel()

@@ -27,8 +27,6 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
     }
     
     override func bind() {
-        let restartButton = PublishRelay<Int>()
-        
         let input = ExchangeViewModel.Input(
             viewDidLoadTrigger: Observable.just(0),
             sortButtonTappedValue: Observable.of(
@@ -68,37 +66,10 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
                         return Observable.just((SortStandard.trading, status))
                     }
                 }
-            },
-            restartNetwork: restartButton
+            }
         )
         
         let output = viewModel.transform(input: input)
-
-        restartButton.subscribe(with: self) { owner, _ in
-            print("재시작 버튼 탭")
-        }
-        .disposed(by: disposeBag)
-        
-        output.networkDisconnected
-            .subscribe(with: self) { owner, _ in
-                print("💕💕💕💕💕💕")
-                let vc = NetworkPopViewController()
-                
-                vc.mainView.retryButton.rx.tap
-                    .map { 0 }
-                    .bind(to: restartButton)
-                    .disposed(by: owner.disposeBag)
-                
-                vc.mainView.configureMessage(
-                    title: "안내",
-                    message: "네트워크 연결이 일시적으로 원활하지 않습니다. 데이터 또는 Wi-Fi 연결 상태를 확인해주세요."
-                )
-                vc.modalPresentationStyle = .overCurrentContext
-                vc.modalTransitionStyle = .crossDissolve
-                owner.present(vc, animated: false)
-            }
-            .disposed(by: disposeBag)
-        
         
         // coin 테이블뷰
         output.coinItems
@@ -106,5 +77,37 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
                 cell.configureData(data: element)
             }
             .disposed(by: disposeBag)
+        
+        // 네트워크 통신 성공 -> 화면 내리기
+//        output.coinItems
+//            .bind(with: self) { owner, _ in
+//                owner.dismiss(animated: true)
+//            }
+//            .disposed(by: disposeBag)
+//        
+        // 네트워크 단절 or 네트워크 에러
+        output.networkDisconnected
+            .subscribe(with: self) { owner, message in
+                print("💕💕💕💕💕💕")
+                let vc = NetworkPopViewController()
+                vc.mainView.retryButton.rx.tap
+                    .bind(with: self, onNext: { owner, _ in
+//                        restartButton.accept(0)
+                        owner.viewModel.restartNetwork.accept(1)
+                        owner.dismiss(animated: true)
+                    })
+                    .disposed(by: owner.disposeBag)
+                
+                vc.mainView.configureMessage(message)
+                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalTransitionStyle = .crossDissolve
+                owner.present(vc, animated: false)
+            }
+            .disposed(by: disposeBag)
+        
+//        restartButton.subscribe(with: self) { owner, _ in
+//            print("재시작 버튼 탭")
+//        }
+//        .disposed(by: disposeBag)
     }
 }
