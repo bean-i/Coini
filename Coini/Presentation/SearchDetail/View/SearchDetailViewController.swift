@@ -22,10 +22,44 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
     
     override func bind() {
         let input = SearchDetailViewModel.Input(
+            viewDidLoadTrigger: Observable.just(()),
             stockMoreButtonTapped: mainView.stockInfoHeader.moreButton.rx.tap,
             investMoreButtonTapped: mainView.investInfoHeader.moreButton.rx.tap
         )
         let output = viewModel.transform(input: input)
+        
+        // 네트워크 단절 or 네트워크 에러
+        output.networkDisconnected
+            .subscribe(with: self) { owner, message in
+                print("네트워크 단절")
+                Loading.shared.hideLoading()
+                let vc = NetworkPopViewController()
+                vc.mainView.retryButton.rx.tap
+                    .bind(with: self, onNext: { owner, _ in
+                        owner.dismiss(animated: true)
+                    })
+                    .disposed(by: owner.disposeBag)
+                
+                vc.mainView.configureMessage(message)
+                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalTransitionStyle = .crossDissolve
+                owner.present(vc, animated: false)
+            }
+            .disposed(by: disposeBag)
+        
+        // 뷰디드로드 -> 인디케이터 show
+        output.viewDidLoadTrigger
+            .bind(with: self) { owner, _ in
+                Loading.shared.showLoading()
+            }
+            .disposed(by: disposeBag)
+        
+        // 통신 완료 -> 인디케이터 hide
+        output.networkCompleted
+            .bind(with: self) { owner, _ in
+                Loading.shared.hideLoading()
+            }
+            .disposed(by: disposeBag)
         
         mainView.navButton.rx.tap
             .bind(with: self) { owner, _ in
