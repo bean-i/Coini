@@ -26,28 +26,13 @@ final class ExchangeViewModel: BaseViewModel {
     
     func transform(input: Input) -> Output {
         // coin 데이터
-        let coinItems: BehaviorRelay<[Ticker]> = BehaviorRelay(value: [])
+        let coinItems: BehaviorRelay<[Ticker]> = BehaviorRelay(value: [Ticker.empty])
         // 정렬 변수
         let sortBy: BehaviorRelay<(SortStandard, SortStatus)> = BehaviorRelay(value: (.trading, .FALL))
         // 인터넷 연결 상태
         let networkConnected = NetworkMonitor.shared.networkStatus
         // 인터넷 연결 끊김
         let networkDisConnected = PublishRelay<APIErrorMessage>()
-        
-//        input.restartNetwork
-//            .bind(with: self) { owner, _ in
-//                print("뷰모델에서 재시작 버튼 감지")
-//            }
-//            .disposed(by: disposeBag)
-        
-        // 네트워크 상태
-        
-//        NetworkMonitor.shared.networkStatus
-//            .subscribe(with: self, onNext: { owner, status in
-//                print("✅✅✅✅✅✅")
-//                networkConnected.accept(status)
-//            })
-//            .disposed(by: disposeBag)
         
         // 화면 진입 + 5초마다 네트워크 통신
         Observable.merge(
@@ -61,7 +46,7 @@ final class ExchangeViewModel: BaseViewModel {
             if networkConnected.value == .disconnect || networkConnected.value == .unknown {
                 print("인터넷 연결이 안 돼있는 것 같아요!!")
                 networkDisConnected.accept(AFError.network.description)
-                return Single<[Ticker]>.error(URLError(.notConnectedToInternet))
+                return Single.just([Ticker.empty])
             } else {
                 return UpbitNetworkManager.shared.getTickers(api: .upbitTickers, type: [Ticker].self)
                     .catch { error in

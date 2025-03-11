@@ -36,7 +36,11 @@ final class CoinInfoViewModel: BaseViewModel {
                         return Single.just(Trending.empty)
                     }
             }
-            .map { (Array($0.coins[0..<14]), Array($0.nfts[0..<7])) }
+            .map { result in
+                let coinMax = result.coins.count > 14 ? 14 : result.coins.count
+                let nftMax = result.nfts.count > 7 ? 7 : result.nfts.count
+                return (Array(result.coins[0..<coinMax]), Array(result.nfts[0..<nftMax]))
+            }
             .subscribe(with: self) { owner, value in
                 print("2️⃣2️⃣2️⃣통신 완료(성공/실패)2️⃣2️⃣2️⃣")
                 owner.coinItems.accept(value.0)
@@ -90,7 +94,11 @@ final class CoinInfoViewModel: BaseViewModel {
                     }
             }
         }
-        .map { (Array($0.coins[0..<14]), Array($0.nfts[0..<7])) }
+        .map { result in
+            let coinMax = result.coins.count > 14 ? 14 : result.coins.count
+            let nftMax = result.nfts.count > 7 ? 7 : result.nfts.count
+            return (Array(result.coins[0..<coinMax]), Array(result.nfts[0..<nftMax]))
+        }
         .subscribe(with: self) { owner, value in
             print("2️⃣2️⃣2️⃣통신 완료(성공/실패)2️⃣2️⃣2️⃣")
             owner.coinItems.accept(value.0)
