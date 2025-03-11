@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 protocol LikedService {
-    func getFileURL()
+//    func getFileURL()
     func isExist(coinID: String) -> Bool
     func create(data: Liked)
     func delete(coinID: String)
@@ -19,9 +19,9 @@ final class LikedRepository: LikedService {
     
     let realm = try! Realm()
     
-    func getFileURL() {
-        print(realm.configuration.fileURL)
-    }
+//    func getFileURL() {
+//        print(realm.configuration.fileURL)
+//    }
     
     func isExist(coinID: String) -> Bool {
         let existItem = realm.objects(Liked.self).where({ $0.coinID == coinID }).first

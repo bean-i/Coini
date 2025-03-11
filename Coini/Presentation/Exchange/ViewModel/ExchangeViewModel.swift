@@ -64,7 +64,10 @@ final class ExchangeViewModel: BaseViewModel {
                     }
             }
         }
-        .map { self.sortedByStandard(value: $0, standard: sortBy.value.0, by: sortBy.value.1) }
+        .withUnretained(self)
+        .map { owner, result in
+            owner.sortedByStandard(value: result, standard: sortBy.value.0, by: sortBy.value.1)
+        }
         .subscribe(with: self) { owner, value in
             print("1️⃣1️⃣1️⃣통신 완료(성공/실패)1️⃣1️⃣1️⃣")
             coinItems.accept(value)
@@ -84,8 +87,9 @@ final class ExchangeViewModel: BaseViewModel {
         
         // 기존 데이터 정렬 수행
         sortBy
-            .map {
-                self.sortedByStandard(value: coinItems.value, standard: $0.0, by: $0.1)
+            .withUnretained(self)
+            .map { owner, result in
+                owner.sortedByStandard(value: coinItems.value, standard: result.0, by: result.1)
             }
             .bind(to: coinItems)
             .disposed(by: disposeBag)

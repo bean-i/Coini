@@ -25,7 +25,8 @@ final class CoinSearchViewController: BaseViewController<CoinSearchView> {
             output.searchResults.asObservable(),
             output.updateData.asObservable()
         )
-        .bind(to: mainView.coinTableView.rx.items(cellIdentifier: CoinSearchTableViewCell.identifier, cellType: CoinSearchTableViewCell.self)) { (row, element, cell) in
+        .bind(to: mainView.coinTableView.rx.items(cellIdentifier: CoinSearchTableViewCell.identifier, cellType: CoinSearchTableViewCell.self)) { [weak self] (row, element, cell) in
+            guard let self else { return }
             cell.configureData(data: element)
             
             cell.starButton.rx.tap
@@ -43,7 +44,8 @@ final class CoinSearchViewController: BaseViewController<CoinSearchView> {
         
         // 네트워크 단절 or 네트워크 에러
         output.networkDisconnected
-            .subscribe(with: self) { owner, message in
+            .subscribe(with: self) { [weak self] owner, message in
+                guard let self else { return }
                 let vc = NetworkPopViewController()
                 vc.mainView.retryButton.rx.tap
                     .bind(with: self, onNext: { owner, _ in

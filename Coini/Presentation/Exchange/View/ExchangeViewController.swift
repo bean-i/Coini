@@ -77,7 +77,8 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
         
         // 네트워크 단절 or 네트워크 에러
         output.networkDisconnected
-            .subscribe(with: self) { owner, message in
+            .subscribe(with: self) { [weak self] owner, message in
+                guard let self else { return }
                 let vc = NetworkPopViewController()
                 vc.mainView.retryButton.rx.tap
                     .bind(with: self, onNext: { owner, _ in

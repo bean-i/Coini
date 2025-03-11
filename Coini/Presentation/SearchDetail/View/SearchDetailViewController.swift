@@ -31,7 +31,8 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
         // 네트워크 단절 or 네트워크 에러
         output.networkDisconnected
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, message in
+            .subscribe(with: self) { [weak self] owner, message in
+                guard let self else { return }
                 DispatchQueue.main.async {
                     Loading.shared.hideLoading()
                 }
