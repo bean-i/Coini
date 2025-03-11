@@ -41,7 +41,7 @@ final class SearchDetailViewController: BaseViewController<SearchDetailView> {
                     .disposed(by: owner.disposeBag)
                 
                 vc.mainView.configureMessage(message)
-                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalPresentationStyle = .overFullScreen
                 vc.modalTransitionStyle = .crossDissolve
                 owner.present(vc, animated: false)
             }

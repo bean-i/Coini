@@ -78,13 +78,6 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
             }
             .disposed(by: disposeBag)
         
-        // 네트워크 통신 성공 -> 화면 내리기
-//        output.coinItems
-//            .bind(with: self) { owner, _ in
-//                owner.dismiss(animated: true)
-//            }
-//            .disposed(by: disposeBag)
-//        
         // 네트워크 단절 or 네트워크 에러
         output.networkDisconnected
             .subscribe(with: self) { owner, message in
@@ -92,14 +85,13 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
                 let vc = NetworkPopViewController()
                 vc.mainView.retryButton.rx.tap
                     .bind(with: self, onNext: { owner, _ in
-//                        restartButton.accept(0)
                         owner.viewModel.restartNetwork.accept(1)
                         owner.dismiss(animated: true)
                     })
                     .disposed(by: owner.disposeBag)
                 
                 vc.mainView.configureMessage(message)
-                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalPresentationStyle = .overFullScreen
                 vc.modalTransitionStyle = .crossDissolve
                 owner.present(vc, animated: false)
             }

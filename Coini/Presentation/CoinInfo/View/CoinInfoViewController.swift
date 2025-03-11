@@ -44,7 +44,7 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
                     .disposed(by: owner.disposeBag)
                 
                 vc.mainView.configureMessage(message)
-                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalPresentationStyle = .overFullScreen
                 vc.modalTransitionStyle = .crossDissolve
                 owner.present(vc, animated: false)
             }

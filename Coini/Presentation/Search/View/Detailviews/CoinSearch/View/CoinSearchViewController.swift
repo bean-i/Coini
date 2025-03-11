@@ -52,7 +52,7 @@ final class CoinSearchViewController: BaseViewController<CoinSearchView> {
                     .disposed(by: owner.disposeBag)
                 
                 vc.mainView.configureMessage(message)
-                vc.modalPresentationStyle = .overCurrentContext
+                vc.modalPresentationStyle = .overFullScreen
                 vc.modalTransitionStyle = .crossDissolve
                 owner.present(vc, animated: false)
             }
