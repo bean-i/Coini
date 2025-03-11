@@ -15,7 +15,23 @@
 		EADF30532D7B182000C1CE41 /* APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = EADF30522D7B182000C1CE41 /* APIKey.swift */; };
 		EADF325F2D7C3AFE00C1CE41 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EADF325E2D7C3AFE00C1CE41 /* Kingfisher */; };
 		EADF34B12D7EE8FF00C1CE41 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = EADF34B02D7EE8FF00C1CE41 /* Toast */; };
+		EADF358D2D80100300C1CE41 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EADF358C2D80100300C1CE41 /* RealmSwift */; };
+		EADF358E2D80140500C1CE41 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = EADF358C2D80100300C1CE41 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EADF358F2D80140500C1CE41 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EADF358E2D80140500C1CE41 /* RealmSwift in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		EADF2FCE2D7B146A00C1CE41 /* Coini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coini.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +67,7 @@
 			files = (
 				EADF34B12D7EE8FF00C1CE41 /* Toast in Frameworks */,
 				EADF2FED2D7B151C00C1CE41 /* Alamofire in Frameworks */,
+				EADF358D2D80100300C1CE41 /* RealmSwift in Frameworks */,
 				EADF2FF02D7B152600C1CE41 /* SnapKit in Frameworks */,
 				EADF2FEA2D7B14F900C1CE41 /* RxSwift in Frameworks */,
 				EADF2FE82D7B14F900C1CE41 /* RxCocoa in Frameworks */,
@@ -89,6 +106,7 @@
 				EADF2FCA2D7B146A00C1CE41 /* Sources */,
 				EADF2FCB2D7B146A00C1CE41 /* Frameworks */,
 				EADF2FCC2D7B146A00C1CE41 /* Resources */,
+				EADF358F2D80140500C1CE41 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -105,6 +123,7 @@
 				EADF2FEF2D7B152600C1CE41 /* SnapKit */,
 				EADF325E2D7C3AFE00C1CE41 /* Kingfisher */,
 				EADF34B02D7EE8FF00C1CE41 /* Toast */,
+				EADF358C2D80100300C1CE41 /* RealmSwift */,
 			);
 			productName = Coini;
 			productReference = EADF2FCE2D7B146A00C1CE41 /* Coini.app */;
@@ -140,6 +159,7 @@
 				EADF2FEE2D7B152600C1CE41 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				EADF325D2D7C3AFE00C1CE41 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				EADF34AF2D7EE8FF00C1CE41 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				EADF358B2D80100300C1CE41 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EADF2FCF2D7B146A00C1CE41 /* Products */;
@@ -423,6 +443,14 @@
 				minimumVersion = 5.1.1;
 			};
 		};
+		EADF358B2D80100300C1CE41 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 20.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -455,6 +483,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EADF34AF2D7EE8FF00C1CE41 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
 			productName = Toast;
+		};
+		EADF358C2D80100300C1CE41 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EADF358B2D80100300C1CE41 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
