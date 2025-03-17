@@ -10,6 +10,8 @@ import SnapKit
 
 final class SortButton: UIButton {
 
+    var buttonStatus: SortStatus = .EVEN
+    
     private let sortLabel = UILabel()
     private let imageContentView = UIView()
     let upImageView = UIImageView()
@@ -77,28 +79,36 @@ final class SortButton: UIButton {
     }
     
     // 현재 상태에 따라 상태 변경
-    func configureTapStatus() -> SortStatus {
-        // 아무것도 선택되지 않았을 때 -> 내림차순
-        if upImageView.tintColor == .customDarkGray,
-           downImageView.tintColor == .customDarkGray {
-            downImageView.tintColor = .customNavy
-            return .FALL
-            // 내림차순 선택돼있을 때 -> 오름차순
-        } else if upImageView.tintColor == .customDarkGray,
-                  downImageView.tintColor == .customNavy {
-            upImageView.tintColor = .customNavy
-            downImageView.tintColor = .customDarkGray
-            return .RISE
-            // 오름차순 선택돼있을 때 -> 해제
-        } else {
+    func configureTapStatus() {
+        switch buttonStatus {
+        case .EVEN:
+            buttonStatus = .FALL
+        case .RISE:
+            buttonStatus = .EVEN
+        case .FALL:
+            buttonStatus = .RISE
+        }
+        
+        configureTapUI(status: buttonStatus)
+    }
+    
+    func configureTapUI(status: SortStatus) {
+        switch status {
+        case .EVEN:
             upImageView.tintColor = .customDarkGray
             downImageView.tintColor = .customDarkGray
-            return .EVEN
+        case .RISE:
+            upImageView.tintColor = .customNavy
+            downImageView.tintColor = .customDarkGray
+        case .FALL:
+            upImageView.tintColor = .customDarkGray
+            downImageView.tintColor = .customNavy
         }
     }
     
     // 상태 초기화
     func configureResetStatus() {
+        buttonStatus = .EVEN
         upImageView.tintColor = .customDarkGray
         downImageView.tintColor = .customDarkGray
     }

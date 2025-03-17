@@ -38,30 +38,18 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
                 case .current:
                     mainView.comparedValueButton.configureResetStatus()
                     mainView.tradingValueButton.configureResetStatus()
-                    let status = mainView.currentValueButton.configureTapStatus()
-                    if status == .EVEN {
-                        return Observable.just((SortStandard.trading, SortStatus.FALL))
-                    } else {
-                        return Observable.just((SortStandard.current, status))
-                    }
+                    mainView.currentValueButton.configureTapStatus()
+                    return Observable.just(($0, mainView.currentValueButton.buttonStatus))
                 case .compared:
                     mainView.currentValueButton.configureResetStatus()
                     mainView.tradingValueButton.configureResetStatus()
-                    let status = mainView.comparedValueButton.configureTapStatus()
-                    if status == .EVEN {
-                        return Observable.just((SortStandard.trading, SortStatus.FALL))
-                    } else {
-                        return Observable.just((SortStandard.compared, status))
-                    }
+                    mainView.comparedValueButton.configureTapStatus()
+                    return Observable.just(($0, mainView.comparedValueButton.buttonStatus))
                 case .trading:
                     mainView.currentValueButton.configureResetStatus()
                     mainView.comparedValueButton.configureResetStatus()
-                    let status = mainView.tradingValueButton.configureTapStatus()
-                    if status == SortStatus.EVEN {
-                        return Observable.just((SortStandard.trading, SortStatus.FALL))
-                    } else {
-                        return Observable.just((SortStandard.trading, status))
-                    }
+                    mainView.tradingValueButton.configureTapStatus()
+                    return Observable.just(($0, mainView.tradingValueButton.buttonStatus))
                 }
             }
         )

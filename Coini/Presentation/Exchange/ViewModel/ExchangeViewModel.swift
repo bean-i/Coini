@@ -82,6 +82,12 @@ final class ExchangeViewModel: BaseViewModel {
         
         // 정렬 버튼 탭 -> 정렬 변수 업데이트
         input.sortButtonTappedValue
+            .map { value in
+                if value.1 == .EVEN {
+                    return (SortStandard.trading, SortStatus.FALL)
+                }
+                return value
+            }
             .bind(to: sortBy)
             .disposed(by: disposeBag)
         
