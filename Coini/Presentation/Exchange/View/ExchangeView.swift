@@ -71,6 +71,10 @@ final class ExchangeView: BaseView {
         coinTableView.allowsSelection = false
         coinTableView.showsVerticalScrollIndicator = false
         coinTableView.register(ExchangeTableViewCell.self, forCellReuseIdentifier: ExchangeTableViewCell.identifier)
+        
+        currentValueButton.buttonStandard = .current
+        comparedValueButton.buttonStandard = .compared
+        tradingValueButton.buttonStandard = .trading
     }
     
 }

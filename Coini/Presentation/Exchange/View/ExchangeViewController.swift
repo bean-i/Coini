@@ -26,31 +26,14 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
     override func bind() {
         let input = ExchangeViewModel.Input(
             viewDidLoadTrigger: Observable.just(0),
-            sortButtonTappedValue: Observable.of(
+            sortButtonTappedValue: Observable.merge(
                 mainView.currentValueButton.rx.tap.map { SortStandard.current },
                 mainView.comparedValueButton.rx.tap.map { SortStandard.compared },
                 mainView.tradingValueButton.rx.tap.map { SortStandard.trading }
             )
-            .merge()
             .flatMap { [weak self] in
                 guard let self else { return Observable.just((SortStandard.trading, SortStatus.FALL)) }
-                switch $0 {
-                case .current:
-                    mainView.comparedValueButton.configureResetStatus()
-                    mainView.tradingValueButton.configureResetStatus()
-                    mainView.currentValueButton.configureTapStatus()
-                    return Observable.just(($0, mainView.currentValueButton.buttonStatus))
-                case .compared:
-                    mainView.currentValueButton.configureResetStatus()
-                    mainView.tradingValueButton.configureResetStatus()
-                    mainView.comparedValueButton.configureTapStatus()
-                    return Observable.just(($0, mainView.comparedValueButton.buttonStatus))
-                case .trading:
-                    mainView.currentValueButton.configureResetStatus()
-                    mainView.comparedValueButton.configureResetStatus()
-                    mainView.tradingValueButton.configureTapStatus()
-                    return Observable.just(($0, mainView.tradingValueButton.buttonStatus))
-                }
+                return self.processSort(standard: $0)
             }
         )
         
@@ -87,5 +70,27 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
                 owner.view.makeToast(value)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func processSort(standard: SortStandard) -> Observable<(SortStandard, SortStatus)> {
+        
+        var selectedButton = mainView.tradingValueButton
+        let buttons = [
+            mainView.currentValueButton,
+            mainView.comparedValueButton,
+            mainView.tradingValueButton
+        ]
+        
+        for button in buttons {
+            if button.buttonStandard == standard {
+                selectedButton = button
+                button.configureTapStatus()
+            } else {
+                button.configureResetStatus()
+            }
+        }
+        
+        return Observable.just((selectedButton.buttonStandard, selectedButton.buttonStatus))
+        
     }
 }

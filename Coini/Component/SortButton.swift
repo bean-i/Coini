@@ -10,6 +10,7 @@ import SnapKit
 
 final class SortButton: UIButton {
 
+    var buttonStandard: SortStandard = .trading
     var buttonStatus: SortStatus = .EVEN
     
     private let sortLabel = UILabel()
