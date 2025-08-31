@@ -39,7 +39,7 @@ extension Double {
     func convertToMillion() -> String {
         let intValue = Int(self)
         if intValue > 1000000 {
-            return "\(NumberFormatter.formatted(intValue/1000000 as NSNumber))백만"
+            return "\(NumberFormatter.formatted(intValue/1000000 as NSNumber))百万"
         } else {
             return NumberFormatter.formatted(intValue as NSNumber)
         }

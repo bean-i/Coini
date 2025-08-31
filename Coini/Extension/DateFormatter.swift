@@ -11,7 +11,7 @@ extension DateFormatter {
     
     static let networkTime = { date in
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM.dd HH:mm 기준"
+        formatter.dateFormat = "MM.dd HH:mm 現在"
         formatter.locale = Locale(identifier: "ko-KR")
         formatter.timeZone = TimeZone.current
         return formatter.string(from: date)
@@ -31,7 +31,7 @@ extension DateFormatter {
     static let yearMonthDay = { str in
         let date = DateFormatter.isoStringToDate(str)
         let formatter = DateFormatter()
-        formatter.dateFormat = "yy년 M월 d일"
+        formatter.dateFormat = "yy年MrM月dd日"
         formatter.locale = Locale(identifier: "ko-KR")
         formatter.timeZone = TimeZone.current
         return formatter.string(from: date)

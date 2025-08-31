@@ -8,9 +8,9 @@
 import Foundation
 
 enum SortStandard: String {
-    case current = "현재가"
-    case compared = "전일대비"
-    case trading = "거래대금"
+    case current = "現在値"
+    case compared = "前日比"
+    case trading = "取引代金"
 }
 
 enum SortStatus: String { // rawValue와 통신 값 비교를 위해 대문자로 표기

@@ -17,17 +17,17 @@ final class CoiniTabBarController: UITabBarController {
     
     private func configureTabBarController() {
         let firstVC = ExchangeViewController()
-        firstVC.tabBarItem.title = "거래소"
+        firstVC.tabBarItem.title = "取引所"
         firstVC.tabBarItem.image = UIImage(systemName: "chart.line.uptrend.xyaxis")
         let firstNav = UINavigationController(rootViewController: firstVC)
         
         let secondVC = CoinInfoViewController()
-        secondVC.tabBarItem.title = "코인정보"
+        secondVC.tabBarItem.title = "コイン情報"
         secondVC.tabBarItem.image = UIImage(systemName: "chart.bar.fill")
         let secondNav = UINavigationController(rootViewController: secondVC)
         
         let thirdVC = PortfolioViewController()
-        thirdVC.tabBarItem.title = "포트폴리오"
+        thirdVC.tabBarItem.title = "ポートフォリオ"
         thirdVC.tabBarItem.image = UIImage(systemName: "star")
         let thirdNav = UINavigationController(rootViewController: thirdVC)
         

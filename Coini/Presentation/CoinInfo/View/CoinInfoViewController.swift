@@ -16,7 +16,7 @@ final class CoinInfoViewController: BaseViewController<CoinInfoView> {
     
     override func configureNavigation() {
         let titleLabel = UILabel()
-        titleLabel.text = "가상자산 / 심볼 검색"
+        titleLabel.text = "暗号資産 / シンボル検索"
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.textColor = .customNavy
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)

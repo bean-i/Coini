@@ -36,7 +36,7 @@ final class InfoHeader: BaseView {
         titleLabel.font = .boldSystemFont(ofSize: 12)
         titleLabel.textColor = .customNavy
         
-        moreButton.setTitle("더보기", for: .normal)
+        moreButton.setTitle("もっと見る", for: .normal)
         moreButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .regular)
         moreButton.setTitleColor(.customDarkGray, for: .normal)
         moreButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)

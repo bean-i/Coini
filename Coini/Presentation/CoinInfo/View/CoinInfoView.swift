@@ -72,7 +72,7 @@ final class CoinInfoView: BaseView {
     }
     
     override func configureView() {
-        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "검색어를 입력해주세요.", attributes: [.foregroundColor : UIColor.customDarkGray.cgColor])
+        searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: "銘柄名 / シンボルを入力", attributes: [.foregroundColor : UIColor.customDarkGray.cgColor])
         searchBar.backgroundImage = UIImage()
         searchBar.searchTextField.layer.borderColor = UIColor.customDarkGray.cgColor
         searchBar.searchTextField.layer.cornerRadius = 18
@@ -84,7 +84,7 @@ final class CoinInfoView: BaseView {
         keywordStackView.axis = .horizontal
         keywordStackView.distribution = .fillEqually
         
-        keywordTitleLabel.text = "인기 검색어"
+        keywordTitleLabel.text = "人気検索ワード"
         keywordTitleLabel.textAlignment = .left
         keywordTitleLabel.font = .boldSystemFont(ofSize: 14)
         keywordTitleLabel.textColor = .customNavy
@@ -97,7 +97,7 @@ final class CoinInfoView: BaseView {
         keywordCollectionView.showsHorizontalScrollIndicator = false
         keywordCollectionView.register(KeywordCollectionViewCell.self, forCellWithReuseIdentifier: KeywordCollectionViewCell.identifier)
         
-        nftTitleLabel.text = "인기 NFT"
+        nftTitleLabel.text = "人気NFT"
         nftTitleLabel.font = .boldSystemFont(ofSize: 14)
         nftTitleLabel.textColor = .customNavy
         

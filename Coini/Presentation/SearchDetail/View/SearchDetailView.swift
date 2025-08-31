@@ -201,7 +201,7 @@ final class SearchDetailView: BaseView {
         updateTime.font = .systemFont(ofSize: 9, weight: .regular)
         updateTime.textColor = .customDarkGray
         
-        stockInfoHeader.titleLabel.text = "종목정보"
+        stockInfoHeader.titleLabel.text = "銘柄情報"
         
         stockView.backgroundColor = .customLightGray
         stockView.layer.cornerRadius = 10
@@ -209,15 +209,15 @@ final class SearchDetailView: BaseView {
         stackView24.axis = .horizontal
         stackView24.spacing = 100
         
-        lowPrice24.titleLabel.text = "24시간 고가"
-        highPrice24.titleLabel.text = "24시간 저가"
+        lowPrice24.titleLabel.text = "24時間高値"
+        highPrice24.titleLabel.text = "24時間安値"
         
         stackViewAllTime.axis = .horizontal
         stackViewAllTime.spacing = 100
         
-        allTimeHighPrice.titleLabel.text = "역대 최고가"
-        allTimeLowPrice.titleLabel.text = "역대 최저가"
-        investInfoHeader.titleLabel.text = "투자지표"
+        allTimeHighPrice.titleLabel.text = "史上最高値"
+        allTimeLowPrice.titleLabel.text = "史上最安値"
+        investInfoHeader.titleLabel.text = "投資指標"
         
         investView.backgroundColor = .customLightGray
         investView.layer.cornerRadius = 10
@@ -225,9 +225,9 @@ final class SearchDetailView: BaseView {
         investPriceStackView.axis = .vertical
         investPriceStackView.spacing = 10
         
-        marketCap.titleLabel.text = "시가총액"
-        fullDilutedValue.titleLabel.text = "완전 희석 가치(FDV)"
-        totalVolume.titleLabel.text = "총 거래량"
+        marketCap.titleLabel.text = "時価総額"
+        fullDilutedValue.titleLabel.text = "完全希薄化後時価総額 (FDV)"
+        totalVolume.titleLabel.text = "総取引量"
     }
     
     func configureNavigation(title: String, image: String, coinID: String) {
@@ -268,7 +268,7 @@ final class SearchDetailView: BaseView {
         }
         
         // 업데이트 날짜
-        updateTime.text = "\(DateFormatter.monthDayDate(data.lastUpdate)) 업데이트"
+        updateTime.text = "\(DateFormatter.monthDayDate(data.lastUpdate)) アップデート"
         
         // 24시간 고가
         highPrice24.priceLabel.text = "￦\(NumberFormatter.formatted(data.high24h as NSNumber))"

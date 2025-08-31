@@ -28,9 +28,9 @@ final class SearchViewModel: BaseViewModel {
     }
     
     let headerItems = [
-        HeaderItem(isSelected: true, title: "코인"),
+        HeaderItem(isSelected: true, title: "コイン"),
         HeaderItem(isSelected: false, title: "NFT"),
-        HeaderItem(isSelected: false, title: "거래소")
+        HeaderItem(isSelected: false, title: "取引所")
     ]
     
 //    var searchKeyword = "empty"

@@ -14,9 +14,9 @@ final class ExchangeView: BaseView {
     private let sortView = UIView()
     private let sortStackView = UIStackView()
     private let coinLabel = UILabel()
-    let currentValueButton = SortButton(text: "현재가")
-    let comparedValueButton = SortButton(text: "전일대비")
-    let tradingValueButton = SortButton(text: "거래대금")
+    let currentValueButton = SortButton(text: "現在値")
+    let comparedValueButton = SortButton(text: "前日比")
+    let tradingValueButton = SortButton(text: "取引代金")
     
     // 테이블뷰
     let coinTableView = UITableView()
@@ -61,7 +61,7 @@ final class ExchangeView: BaseView {
         sortStackView.axis = .horizontal
         sortStackView.distribution = .fillEqually
         
-        coinLabel.text = "코인"
+        coinLabel.text = "コイン"
         coinLabel.font = .systemFont(ofSize: 12, weight: .bold)
         coinLabel.textColor = .customNavy
         coinLabel.textAlignment = .left

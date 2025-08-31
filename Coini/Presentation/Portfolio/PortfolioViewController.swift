@@ -16,7 +16,7 @@ final class PortfolioViewController: UIViewController {
     
     private func configureNavigation() {
         let titleLabel = UILabel()
-        titleLabel.text = "포트폴리오"
+        titleLabel.text = "ポートフォリオ"
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.textColor = .customNavy
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)

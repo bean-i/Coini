@@ -17,7 +17,7 @@ final class ExchangeViewController: BaseViewController<ExchangeView> {
     
     override func configureNavigation() {
         let titleLabel = UILabel()
-        titleLabel.text = "거래소"
+        titleLabel.text = "取引所"
         titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
         titleLabel.textColor = .customNavy
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: titleLabel)
